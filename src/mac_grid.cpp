@@ -149,9 +149,25 @@ void MACGrid::advectVelocity(double dt)
 
         //std::cout << i << ", " << j << ", " << k << ": " << std::endl;
 
-        if(j < theDim[MACGrid::Y] && k < theDim[MACGrid::Z]) {
+        if(isValidFace(0, i, j, k)) {
             vec3 curPosXface = getFacePosition(0, i, j, k);
-            vec3 curVelXface(mU(i, j, k), 0.0, 0.0);
+            double curVely = 0, curVelz = 0;
+
+            // Average mV of 4 neighboring Y faces
+            if(isValidFace(1, i-1, j, k)) curVely += mV(i-1, j, k);
+            if(isValidFace(1, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
+            if(isValidFace(1, i, j, k)) curVely += mV(i, j, k);
+            if(isValidFace(1, i, j+1, k)) curVely += mV(i, j+1, k);
+            curVely *= 0.25;
+
+            // Average mW of 4 neighboring Z faces
+            if(isValidFace(2, i-1, j, k)) curVelz += mW(i-1, j, k);
+            if(isValidFace(2, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
+            if(isValidFace(2, i, j, k)) curVelz += mW(i, j, k);
+            if(isValidFace(2, i, j, k+1)) curVelz += mW(i, j, k+1);
+            curVelz *= 0.25;
+
+            vec3 curVelXface(mU(i, j, k), curVely, curVelz);
             vec3 oldPosXface;
 
             if(theBackTraceMode == FORWARDEULER) {
@@ -172,9 +188,25 @@ void MACGrid::advectVelocity(double dt)
             target.mU(i, j, k) = newVelX[0];
         }
 
-        if(j < theDim[MACGrid::Y] && k < theDim[MACGrid::Z]) {
+        if(isValidFace(1, i, j, k)) {
             vec3 curPosYface = getFacePosition(1, i, j, k);
-            vec3 curVelYface(0.0, mV(i, j, k), 0.0);
+            double curVelx = 0, curVelz = 0;
+
+            // Average mU of 4 neighboring X faces
+            if(isValidFace(0, i, j-1, k)) curVelx += mU(i, j-1, k);
+            if(isValidFace(0, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
+            if(isValidFace(0, i, j, k)) curVelx += mU(i, j, k);
+            if(isValidFace(0, i+1, j, k)) curVelx += mU(i+1, j, k);
+            curVelx *= 0.25;
+
+            // Average mW of 4 neighboring Z faces
+            if(isValidFace(2, i-1, j, k)) curVelz += mW(i-1, j, k);
+            if(isValidFace(2, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
+            if(isValidFace(2, i, j, k)) curVelz += mW(i, j, k);
+            if(isValidFace(2, i, j, k+1)) curVelz += mW(i, j, k+1);
+            curVelz *= 0.25;
+
+            vec3 curVelYface(curVelx, mV(i, j, k), curVelz);
             vec3 oldPosYface;
 
             if(theBackTraceMode == FORWARDEULER) {
@@ -195,11 +227,27 @@ void MACGrid::advectVelocity(double dt)
             target.mV(i, j, k) = newVelY[1];
         }
 
-        if(i < theDim[MACGrid::X] && j < theDim[MACGrid::Y]) {
+        if(isValidFace(2, i, j, k)) {
             vec3 curPosZface = getFacePosition(2, i, j, k);
-            vec3 curVelZface(0.0, 0.0, mW(i, j, k));
+            double curVelx = 0, curVely = 0;
 
+            // Average mU of 4 neighboring X faces
+            if(isValidFace(0, i, j-1, k)) curVelx += mU(i, j-1, k);
+            if(isValidFace(0, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
+            if(isValidFace(0, i, j, k)) curVelx += mU(i, j, k);
+            if(isValidFace(0, i+1, j, k)) curVelx += mU(i+1, j, k);
+            curVelx *= 0.25;
+
+            // Average mV of 4 neighboring Y faces
+            if(isValidFace(1, i-1, j, k)) curVely += mV(i-1, j, k);
+            if(isValidFace(1, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
+            if(isValidFace(1, i, j, k)) curVely += mV(i, j, k);
+            if(isValidFace(1, i, j+1, k)) curVely += mV(i, j+1, k);
+            curVely *= 0.25;
+
+            vec3 curVelZface(curVelx, curVely, mW(i, j, k));
             vec3 oldPosZface;
+
             if(theBackTraceMode == FORWARDEULER) {
                 // Forward Euler
                 oldPosZface = curPosZface - dt * curVelZface;
