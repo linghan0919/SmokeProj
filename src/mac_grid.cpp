@@ -19,7 +19,7 @@ MACGrid target;
 // NOTE: x -> cols, z -> rows, y -> stacks
 MACGrid::RenderMode MACGrid::theRenderMode = SHEETS; // { CUBES; SHEETS; }
 MACGrid::BackTraceMode MACGrid::theBackTraceMode = FORWARDEULER; // { FORWARDEULER, RK2 };
-bool MACGrid::theDisplayVel = true;//false; //true
+bool MACGrid::theDisplayVel = false; //true
 
 #define FOR_EACH_CELL \
    for(int k = 0; k < theDim[MACGrid::Z]; k++)  \
@@ -149,7 +149,7 @@ void MACGrid::advectVelocity(double dt)
 
         //std::cout << i << ", " << j << ", " << k << ": " << std::endl;
 
-        if(isValidFace(0, i, j, k)) {
+        if(isValidFace(MACGrid::X, i, j, k)) {
             vec3 curPosXface = getFacePosition(0, i, j, k);
             double curVely = 0, curVelz = 0;
 
@@ -188,7 +188,7 @@ void MACGrid::advectVelocity(double dt)
             target.mU(i, j, k) = newVelX[0];
         }
 
-        if(isValidFace(1, i, j, k)) {
+        if(isValidFace(MACGrid::Y, i, j, k)) {
             vec3 curPosYface = getFacePosition(1, i, j, k);
             double curVelx = 0, curVelz = 0;
 
@@ -227,7 +227,7 @@ void MACGrid::advectVelocity(double dt)
             target.mV(i, j, k) = newVelY[1];
         }
 
-        if(isValidFace(2, i, j, k)) {
+        if(isValidFace(MACGrid::Z, i, j, k)) {
             vec3 curPosZface = getFacePosition(2, i, j, k);
             double curVelx = 0, curVely = 0;
 
@@ -370,17 +370,25 @@ void MACGrid::advectDensity(double dt)
     mD = target.mD;
 }
 
-void MACGrid::computeBouyancy(double dt)
+void MACGrid::computeBuoyancy(double dt)
 {
-	// TODO: Calculate bouyancy and store in target
+	// TODO: Calculate buoyancy and store in target
 
     // TODO: Get rid of this line after you implement yours
-    target.mV = mV;
+    //target.mV = mV;
 
     // TODO: Your code is here. It modifies target.mV for all y face velocities.
-    //
-    //
-    //
+
+    target.mV = mV;
+    FOR_EACH_CELL {
+        double temperature = mT(i, j, k);
+        double forceBuoy = - theBuoyancyAlpha * theAirDensity
+                    + theBuoyancyBeta * (temperature - theBuoyancyAmbientTemperature);
+
+        target.mV(i, j, k) += 0.5 * dt * forceBuoy;
+        target.mV(i, j+1, k) += 0.5 * dt * forceBuoy;
+    }
+    // Linghan 2018-04-12
 
     // and then save the result to our object
     mV = target.mV;
@@ -399,19 +407,71 @@ void MACGrid::computeVorticityConfinement(double dt)
 	target.mW = mW;
 
     // TODO: Your code is here. It modifies target.mU,mV,mW for all faces.
-    //
-    //
-    //
+    GridData omegaX; omegaX.initialize(0.0);
+    GridData omegaY; omegaY.initialize(0.0);
+    GridData omegaZ; omegaZ.initialize(0.0);
+    GridData omegaLength; omegaLength.initialize(0.0);
 
-   // Then save the result to our object
-   mU = target.mU;
-   mV = target.mV;
-   mW = target.mW;
+    // First, for every cell, compute omega vector, and then |omega|
+    double twoSize = 2 * theCellSize;
+    FOR_EACH_CELL {
+        double w_i_jplus1_k = getVelocityZ(getCenter(i, j+1, k));
+        double w_i_jminus1_k = getVelocityZ(getCenter(i, j-1, k));
+        double v_i_j_kplus1 = getVelocityY(getCenter(i, j, k+1));
+        double v_i_j_kminus1 = getVelocityY(getCenter(i, j, k-1));
+        omegaX(i, j, k) = ((w_i_jplus1_k - w_i_jminus1_k) - (v_i_j_kplus1 - v_i_j_kminus1)) / twoSize;
+
+        double u_i_j_kplus1 = getVelocityX(getCenter(i, j, k+1));
+        double u_i_j_kminus1 = getVelocityX(getCenter(i, j, k-1));
+        double w_iplus1_j_k = getVelocityZ(getCenter(i+1, j, k));
+        double w_iminus1_j_k = getVelocityZ(getCenter(i-1, j, k));
+        omegaY(i, j, k) = ((u_i_j_kplus1 - u_i_j_kminus1) - (w_iplus1_j_k - w_iminus1_j_k)) / twoSize;
+
+        double v_iplus1_j_k = getVelocityY(getCenter(i+1, j, k));
+        double v_iminus1_j_k = getVelocityY(getCenter(i-1, j, k));
+        double u_i_jplus1_k = getVelocityX(getCenter(i, j+1, k));
+        double u_i_jminus1_k = getVelocityX(getCenter(i, j-1, k));
+        omegaZ(i, j, k) = ((v_iplus1_j_k - v_iminus1_j_k) - (u_i_jplus1_k - u_i_jminus1_k)) / twoSize;
+
+        vec3 omega(omegaX(i, j, k), omegaY(i, j, k), omegaZ(i, j, k));
+        omegaLength(i, j, k) = omega.Length();
+    }
+
+    // Second, compute derivative|omega| for each cell respectively.
+    // Finally, compute N for each cell and force
+
+    FOR_EACH_CELL {
+        double dOmegaX = (omegaLength(i+1, j, k) - omegaLength(i-1, j, k)) / twoSize;
+        double dOmegaY = (omegaLength(i, j+1, k) - omegaLength(i, j-1, k)) / twoSize;
+        double dOmegaZ = (omegaLength(i, j, k+1) - omegaLength(i, j, k-1)) / twoSize;
+
+        vec3 dOmega(dOmegaX, dOmegaY, dOmegaZ);
+        vec3 N = dOmega / (dOmega.Length() + 0.000001);
+        vec3 omega(omegaX(i, j, k), omegaY(i, j, k), omegaZ(i, j, k));
+
+        vec3 forceConf = theVorticityEpsilon * theCellSize * (N.Cross(omega));
+
+        target.mU(i, j, k) += 0.5 * dt *forceConf[0];
+        target.mU(i+1, j, k) += 0.5 * dt *forceConf[0];
+
+        target.mV(i, j, k) += 0.5 * dt *forceConf[1];
+        target.mV(i, j+1, k) += 0.5 * dt *forceConf[1];
+
+        target.mW(i, j, k) += 0.5 * dt *forceConf[2];
+        target.mW(i, j, k+1) += 0.5 * dt *forceConf[2];
+    }
+
+    // Linghan 2018-04-12
+
+    // Then save the result to our object
+    mU = target.mU;
+    mV = target.mV;
+    mW = target.mW;
 }
 
 void MACGrid::addExternalForces(double dt)
 {
-   computeBouyancy(dt);
+   computeBuoyancy(dt);
    computeVorticityConfinement(dt);
 }
 
@@ -425,14 +485,47 @@ void MACGrid::project(double dt)
 	// STARTED.
 
     // TODO: Get rid of these 3 lines after you implement yours
-    target.mU = mU;
-	target.mV = mV;
-	target.mW = mW;
+    //target.mU = mU;
+	//target.mV = mV;
+	//target.mW = mW;
 
     // TODO: Your code is here. It solves for a pressure field and modifies target.mU,mV,mW for all faces.
-    //
-    //
-    //
+    // First, construct b, the entry of which is -(u_i+1,j,k - u_i,j,k + v_i,j+1,k - v_i,j,k + w_i,j,k+1 - w_i,j,k)/h
+    GridData d;
+    d.initialize(0.0);
+
+    FOR_EACH_CELL {
+        d(i, j, k) = (mU(i + 1, j, k) - mU(i, j, k)
+                    + mV(i, j + 1, k) - mV(i, j, k)
+                    + mW(i, j, k + 1) - mW(i, j, k)) / theCellSize;
+        std::cout << d(i, j, k) << std::endl;
+    }
+
+    // Second, construct A, which is already computed using calculateAMatrix() function
+    // Third, solve for p using preconditionedConjugateGradient() function
+
+    // Note: mP here is actually dt/(airDensity*h*h)P
+    preconditionedConjugateGradient(AMatrix, target.mP, d, 1000, 0.00001);
+
+    // Finally, subtract pressure from our velocity
+    // u^(n+1)_i,j,k = u^_i,j,k - dt/(airDensity*h) * (P_i,j,k - P_i-1,j,k)
+    //               = u^*_i,j,k - h * (mP_i,j,k - mP_i-1,j,k)
+    FOR_EACH_FACE {
+        if(isValidFace(MACGrid::X, i, j, k)) {
+            target.mU(i, j, k) = mU(i, j, k) - theCellSize * (target.mP(i, j, k) - target.mP(i-1, j, k));
+        }
+
+        if(isValidFace(MACGrid::Y, i, j, k)) {
+            target.mV(i, j, k) = mV(i, j, k) - theCellSize * (target.mP(i, j, k) - target.mP(i, j-1, k));
+        }
+
+        if(isValidFace(MACGrid::Z, i, j, k)) {
+            target.mW(i, j, k) = mW(i, j, k) - theCellSize * (target.mP(i, j, k) - target.mP(i, j, k-1));
+        }
+
+    }
+
+    // Linghan 2018-04-12
 
 	#ifdef _DEBUG
 	// Check border velocities:
@@ -705,6 +798,8 @@ vec3 MACGrid::getFacePosition(int dimension, int i, int j, int k)
 
 void MACGrid::calculateAMatrix() {
 
+    // coefficients: self -> number of fluid neighbors;
+    //      fluid neighbor -> -1; others -> 0
 	FOR_EACH_CELL {
 
 		int numFluidNeighbors = 0;

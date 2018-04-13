@@ -36,7 +36,7 @@ protected:
 	void initialize();
 
 	// Simulation
-	void computeBouyancy(double dt);
+	void computeBuoyancy(double dt);
 	void computeVorticityConfinement(double dt);
 
 	// Rendering
