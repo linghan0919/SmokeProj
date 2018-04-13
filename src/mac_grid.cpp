@@ -472,7 +472,7 @@ void MACGrid::computeVorticityConfinement(double dt)
 void MACGrid::addExternalForces(double dt)
 {
    computeBuoyancy(dt);
-   computeVorticityConfinement(dt);
+   //computeVorticityConfinement(dt);
 }
 
 void MACGrid::project(double dt)
@@ -491,7 +491,8 @@ void MACGrid::project(double dt)
 
 
     // TODO: Your code is here. It solves for a pressure field and modifies target.mU,mV,mW for all faces.
-    // First, construct d, the entry of which is - (u_i+1,j,k - u_i,j,k + v_i,j+1,k - v_i,j,k + w_i,j,k+1 - w_i,j,k)/h
+    // First, construct d, the entry of which is - (u_i+1,j,k - u_i,j,k + v_i,j+1,k - v_i,j,k + w_i,j,k+1 - w_i,j,k) * h * rho / dt
+    // For boundary, if cell (i+1, j, k) is solid, then, + u(i+1, j, k) * h * rho / dt
     GridData d;
     d.initialize(0.0);
 
@@ -502,36 +503,58 @@ void MACGrid::project(double dt)
         d(i, j, k) = (mU(i, j, k) - mU(i + 1, j, k)
                     + mV(i, j, k) - mV(i, j + 1, k)
                     + mW(i, j, k) - mW(i, j, k + 1)) * h_rho_by_dt;
+
+        // Boundary Condition
+        if(i == 0) {
+            d(i, j, k) = d(i, j, k) + mU(i, j, k) * h_rho_by_dt;
+        }
+        if(i == theDim[MACGrid::X]) {
+            d(i, j, k) = d(i, j, k) + mU(i + 1, j, k) * h_rho_by_dt;
+        }
+        if(j == 0) {
+            d(i, j, k) = d(i, j, k) + mV(i, j, k) * h_rho_by_dt;
+        }
+        if(j == theDim[MACGrid::Y]) {
+            d(i, j, k) = d(i, j, k) + mV(i, j + 1, k) * h_rho_by_dt;
+        }
+        if(k == 0) {
+            d(i, j, k) = d(i, j, k) + mW(i, j, k) * h_rho_by_dt;
+        }
+        if(k == theDim[MACGrid::Z]) {
+            d(i, j, k) = d(i, j, k) + mV(i, j, k + 1) * h_rho_by_dt;
+        }
     }
 
     // Second, construct A, which is already computed using calculateAMatrix() function
     // Third, solve for p using preconditionedConjugateGradient() function
-    preconditionedConjugateGradient(AMatrix, target.mP, d, 1000000, 0.000001);
+    preconditionedConjugateGradient(AMatrix, target.mP, d, 100, 0.000001);
 
-    /*//========================== for debug ====================================
-    FOR_EACH_CELL {
+    //========================== for debug ====================================
+    /*FOR_EACH_CELL {
         std::cout << i << " " << j << " " << k << std::endl;
         double p = AMatrix.diag(i, j, k) * target.mP(i, j, k) - target.mP(i+1,j,k) - target.mP(i-1,j,k) - target.mP(i,j+1,k)
                     - target.mP(i,j-1,k) - target.mP(i,j,k+1) - target.mP(i,j,k-1);
         std::cout << p << " || " << d(i, j, k) << std::endl;
-    }
-    //=========================================================================*/
+    }*/
+    //=========================================================================
 
     // Finally, subtract pressure from our velocity
     // u^(n+1)_i,j,k = u^_i,j,k - dt/(airDensity*h) * (P_i,j,k - P_i-1,j,k)
     //               = u^*_i,j,k - h * (mP_i,j,k - mP_i-1,j,k)
     FOR_EACH_FACE {
         if(isValidFace(MACGrid::X, i, j, k)) {
-            target.mU(i, j, k) = mU(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i-1, j, k));
-            std::cout << target.mP(i, j, k) << " " << target.mP(i-1, j, k) << std::endl;
+            if(i == 0 || i == theDim[MACGrid::X]) target.mU(i, j, k) = 0;
+            else target.mU(i, j, k) = mU(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i-1, j, k));
         }
 
         if(isValidFace(MACGrid::Y, i, j, k)) {
-            target.mV(i, j, k) = mV(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j-1, k));
+            if(j == 0 || j == theDim[MACGrid::Y]) target.mV(i, j, k) = 0;
+            else target.mV(i, j, k) = mV(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j-1, k));
         }
 
         if(isValidFace(MACGrid::Z, i, j, k)) {
-            target.mW(i, j, k) = mW(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j, k-1));
+            if(k == 0 || k == theDim[MACGrid::Z]) target.mW(i, j, k) = 0;
+            else target.mW(i, j, k) = mW(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j, k-1));
         }
 
     }
