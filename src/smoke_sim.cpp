@@ -37,21 +37,21 @@ void SmokeSim::step()
 {
 	double dt = 0.04;//0.1;
 
-   // Step0: Gather user forces
-   mGrid.updateSources();
+    // Step0: Gather user forces
+    mGrid.updateSources();
 
-   // Step1: Calculate new velocities
-   mGrid.advectVelocity(dt); // get Velocity_hat
-   mGrid.addExternalForces(dt); // get Velocity_star
-   mGrid.project(dt); // get Velocity_n+1
+    // Step1: Calculate new velocities
+    mGrid.advectVelocity(dt); // get Velocity_hat
+    //mGrid.addExternalForces(dt); // get Velocity_star
+    mGrid.project(dt); // get Velocity_n+1
 
-   // Step2: Calculate new temperature
-   mGrid.advectTemperature(dt);
+    // Step2: Calculate new temperature
+    mGrid.advectTemperature(dt);
 
-   // Step3: Calculate new density 
-   mGrid.advectDensity(dt);
+    // Step3: Calculate new density
+    mGrid.advectDensity(dt);
 
-	// Step4: Advect rendering particles
+    // Step4: Advect rendering particles
 	mGrid.advectRenderingParticles(dt);
 
 

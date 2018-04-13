@@ -154,17 +154,17 @@ void MACGrid::advectVelocity(double dt)
             double curVely = 0, curVelz = 0;
 
             // Average mV of 4 neighboring Y faces
-            if(isValidFace(1, i-1, j, k)) curVely += mV(i-1, j, k);
-            if(isValidFace(1, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
-            if(isValidFace(1, i, j, k)) curVely += mV(i, j, k);
-            if(isValidFace(1, i, j+1, k)) curVely += mV(i, j+1, k);
+            if(isValidFace(MACGrid::Y, i-1, j, k)) curVely += mV(i-1, j, k);
+            if(isValidFace(MACGrid::Y, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
+            if(isValidFace(MACGrid::Y, i, j, k)) curVely += mV(i, j, k);
+            if(isValidFace(MACGrid::Y, i, j+1, k)) curVely += mV(i, j+1, k);
             curVely *= 0.25;
 
             // Average mW of 4 neighboring Z faces
-            if(isValidFace(2, i-1, j, k)) curVelz += mW(i-1, j, k);
-            if(isValidFace(2, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
-            if(isValidFace(2, i, j, k)) curVelz += mW(i, j, k);
-            if(isValidFace(2, i, j, k+1)) curVelz += mW(i, j, k+1);
+            if(isValidFace(MACGrid::Z, i-1, j, k)) curVelz += mW(i-1, j, k);
+            if(isValidFace(MACGrid::Z, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
+            if(isValidFace(MACGrid::Z, i, j, k)) curVelz += mW(i, j, k);
+            if(isValidFace(MACGrid::Z, i, j, k+1)) curVelz += mW(i, j, k+1);
             curVelz *= 0.25;
 
             vec3 curVelXface(mU(i, j, k), curVely, curVelz);
@@ -193,17 +193,17 @@ void MACGrid::advectVelocity(double dt)
             double curVelx = 0, curVelz = 0;
 
             // Average mU of 4 neighboring X faces
-            if(isValidFace(0, i, j-1, k)) curVelx += mU(i, j-1, k);
-            if(isValidFace(0, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
-            if(isValidFace(0, i, j, k)) curVelx += mU(i, j, k);
-            if(isValidFace(0, i+1, j, k)) curVelx += mU(i+1, j, k);
+            if(isValidFace(MACGrid::X, i, j-1, k)) curVelx += mU(i, j-1, k);
+            if(isValidFace(MACGrid::X, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
+            if(isValidFace(MACGrid::X, i, j, k)) curVelx += mU(i, j, k);
+            if(isValidFace(MACGrid::X, i+1, j, k)) curVelx += mU(i+1, j, k);
             curVelx *= 0.25;
 
             // Average mW of 4 neighboring Z faces
-            if(isValidFace(2, i-1, j, k)) curVelz += mW(i-1, j, k);
-            if(isValidFace(2, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
-            if(isValidFace(2, i, j, k)) curVelz += mW(i, j, k);
-            if(isValidFace(2, i, j, k+1)) curVelz += mW(i, j, k+1);
+            if(isValidFace(MACGrid::Z, i-1, j, k)) curVelz += mW(i-1, j, k);
+            if(isValidFace(MACGrid::Z, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
+            if(isValidFace(MACGrid::Z, i, j, k)) curVelz += mW(i, j, k);
+            if(isValidFace(MACGrid::Z, i, j, k+1)) curVelz += mW(i, j, k+1);
             curVelz *= 0.25;
 
             vec3 curVelYface(curVelx, mV(i, j, k), curVelz);
@@ -232,17 +232,17 @@ void MACGrid::advectVelocity(double dt)
             double curVelx = 0, curVely = 0;
 
             // Average mU of 4 neighboring X faces
-            if(isValidFace(0, i, j-1, k)) curVelx += mU(i, j-1, k);
-            if(isValidFace(0, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
-            if(isValidFace(0, i, j, k)) curVelx += mU(i, j, k);
-            if(isValidFace(0, i+1, j, k)) curVelx += mU(i+1, j, k);
+            if(isValidFace(MACGrid::X, i, j-1, k)) curVelx += mU(i, j-1, k);
+            if(isValidFace(MACGrid::X, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
+            if(isValidFace(MACGrid::X, i, j, k)) curVelx += mU(i, j, k);
+            if(isValidFace(MACGrid::X, i+1, j, k)) curVelx += mU(i+1, j, k);
             curVelx *= 0.25;
 
             // Average mV of 4 neighboring Y faces
-            if(isValidFace(1, i-1, j, k)) curVely += mV(i-1, j, k);
-            if(isValidFace(1, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
-            if(isValidFace(1, i, j, k)) curVely += mV(i, j, k);
-            if(isValidFace(1, i, j+1, k)) curVely += mV(i, j+1, k);
+            if(isValidFace(MACGrid::X, i-1, j, k)) curVely += mV(i-1, j, k);
+            if(isValidFace(MACGrid::X, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
+            if(isValidFace(MACGrid::X, i, j, k)) curVely += mV(i, j, k);
+            if(isValidFace(MACGrid::X, i, j+1, k)) curVely += mV(i, j+1, k);
             curVely *= 0.25;
 
             vec3 curVelZface(curVelx, curVely, mW(i, j, k));
@@ -477,8 +477,8 @@ void MACGrid::addExternalForces(double dt)
 
 void MACGrid::project(double dt)
 {
-   // TODO: Solve Ax = b for pressure
-   // 1. Contruct b
+   // TODO: Solve Ap = d for pressure
+   // 1. Contruct d
    // 2. Construct A 
    // 3. Solve for p
    // Subtract pressure from our velocity and save in target
@@ -489,38 +489,49 @@ void MACGrid::project(double dt)
 	//target.mV = mV;
 	//target.mW = mW;
 
+
     // TODO: Your code is here. It solves for a pressure field and modifies target.mU,mV,mW for all faces.
-    // First, construct b, the entry of which is -(u_i+1,j,k - u_i,j,k + v_i,j+1,k - v_i,j,k + w_i,j,k+1 - w_i,j,k)/h
+    // First, construct d, the entry of which is - (u_i+1,j,k - u_i,j,k + v_i,j+1,k - v_i,j,k + w_i,j,k+1 - w_i,j,k)/h
     GridData d;
     d.initialize(0.0);
 
+    double h_rho_by_dt = theCellSize * theAirDensity / dt;
+    double dt_by_h_rho = 1 / h_rho_by_dt;
+
     FOR_EACH_CELL {
-        d(i, j, k) = (mU(i + 1, j, k) - mU(i, j, k)
-                    + mV(i, j + 1, k) - mV(i, j, k)
-                    + mW(i, j, k + 1) - mW(i, j, k)) / theCellSize;
-        std::cout << d(i, j, k) << std::endl;
+        d(i, j, k) = (mU(i, j, k) - mU(i + 1, j, k)
+                    + mV(i, j, k) - mV(i, j + 1, k)
+                    + mW(i, j, k) - mW(i, j, k + 1)) * h_rho_by_dt;
     }
 
     // Second, construct A, which is already computed using calculateAMatrix() function
     // Third, solve for p using preconditionedConjugateGradient() function
+    preconditionedConjugateGradient(AMatrix, target.mP, d, 1000000, 0.000001);
 
-    // Note: mP here is actually dt/(airDensity*h*h)P
-    preconditionedConjugateGradient(AMatrix, target.mP, d, 1000, 0.00001);
+    /*//========================== for debug ====================================
+    FOR_EACH_CELL {
+        std::cout << i << " " << j << " " << k << std::endl;
+        double p = AMatrix.diag(i, j, k) * target.mP(i, j, k) - target.mP(i+1,j,k) - target.mP(i-1,j,k) - target.mP(i,j+1,k)
+                    - target.mP(i,j-1,k) - target.mP(i,j,k+1) - target.mP(i,j,k-1);
+        std::cout << p << " || " << d(i, j, k) << std::endl;
+    }
+    //=========================================================================*/
 
     // Finally, subtract pressure from our velocity
     // u^(n+1)_i,j,k = u^_i,j,k - dt/(airDensity*h) * (P_i,j,k - P_i-1,j,k)
     //               = u^*_i,j,k - h * (mP_i,j,k - mP_i-1,j,k)
     FOR_EACH_FACE {
         if(isValidFace(MACGrid::X, i, j, k)) {
-            target.mU(i, j, k) = mU(i, j, k) - theCellSize * (target.mP(i, j, k) - target.mP(i-1, j, k));
+            target.mU(i, j, k) = mU(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i-1, j, k));
+            std::cout << target.mP(i, j, k) << " " << target.mP(i-1, j, k) << std::endl;
         }
 
         if(isValidFace(MACGrid::Y, i, j, k)) {
-            target.mV(i, j, k) = mV(i, j, k) - theCellSize * (target.mP(i, j, k) - target.mP(i, j-1, k));
+            target.mV(i, j, k) = mV(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j-1, k));
         }
 
         if(isValidFace(MACGrid::Z, i, j, k)) {
-            target.mW(i, j, k) = mW(i, j, k) - theCellSize * (target.mP(i, j, k) - target.mP(i, j, k-1));
+            target.mW(i, j, k) = mW(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j, k-1));
         }
 
     }
@@ -591,7 +602,7 @@ void MACGrid::project(double dt)
    mV = target.mV;
    mW = target.mW;
 
-	#ifdef _DEBUG
+    #ifdef _DEBUG
    // IMPLEMENT THIS AS A SANITY CHECK: assert (checkDivergence());
    // TODO: Fix duplicate code:
    FOR_EACH_CELL {
@@ -880,6 +891,9 @@ bool MACGrid::preconditionedConjugateGradient(const GridDataMatrix & A, GridData
 
 		if (maxMagnitude(r) <= tolerance) {
 			//PRINT_LINE("PCG converged in " << (iteration + 1) << " iterations.");
+            //PRINT_LINE("r: ");
+            //FOR_EACH_CELL {
+            //            PRINT_LINE(r(i,j,k)); }
 			return true; //return p;
 		}
 
@@ -907,8 +921,21 @@ void MACGrid::calculatePreconditioner(const GridDataMatrix & A) {
 
 	precon.initialize();
 
+    double tao = 0.97;
+
     // TODO: Build the modified incomplete Cholesky preconditioner following Fig 4.2 on page 36 of Bridson's 2007 SIGGRAPH fluid course notes.
     //       This corresponds to filling in precon(i,j,k) for all cells
+    FOR_EACH_CELL {
+        double e = A.diag(i, j, k) - pow((A.plusI(i-1, j, k) * precon(i-1, j, k)), 2)
+                                   - pow((A.plusJ(i, j-1, k) * precon(i, j-1, k)), 2)
+                                   - pow((A.plusK(i, j, k-1) * precon(i, j, k-1)), 2)
+                            - tao * ( A.plusI(i-1, j, k) * (A.plusJ(i-1, j, k) + A.plusK(i-1, j, k)) * pow(precon(i-1, j, k), 2)
+                                  +   A.plusJ(i, j-1, k) * (A.plusI(i, j-1, k) + A.plusK(i, j-1, k)) * pow(precon(i, j-1, k), 2)
+                                  +   A.plusK(i, j, k-1) * (A.plusI(i, j, k-1) + A.plusJ(i, j, k-1)) * pow(precon(i, j, k-1), 2));
+        precon(i, j, k) = 1 / sqrt(e + pow(10, -30));
+    }
+
+    // Linghan 2018-04-12
 
 }
 
@@ -917,7 +944,7 @@ void MACGrid::applyPreconditioner(const GridData & r, const GridDataMatrix & A, 
 
     // TODO: change if(0) to if(1) after you implement calculatePreconditoner function.
 
-    if(0) {
+    if(1) {
 
         // APPLY THE PRECONDITIONER:
         // Solve Lq = r for q:
