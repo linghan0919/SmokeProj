@@ -37,6 +37,10 @@ bool MACGrid::theDisplayVel = false; //true
          for(int i = 0; i < theDim[MACGrid::X]+1; i++) 
 
 
+#define FOR_EACH_YFACE \
+   for(int k = 0; k < theDim[MACGrid::Z]; k++) \
+      for(int j = 0; j < theDim[MACGrid::Y]+1; j++) \
+         for(int i = 0; i < theDim[MACGrid::X]; i++)
 
 
 
@@ -360,9 +364,11 @@ void MACGrid::advectDensity(double dt)
 		}
 
 		vec3 clippedOldPos = clipToGrid(oldPos, curPos);
-		double newDens = getTemperature(clippedOldPos);
+		double newDens = getDensity(clippedOldPos);
 
 		target.mD(i, j, k) = newDens;
+        //std::cout << i << " " << j << " " << k << std::endl;
+        //std::cout << "old: " << mD(i,j,k) << " new: " << newDens << std::endl;
 	}
 	// Linghan 2018-04-10
 
@@ -378,15 +384,20 @@ void MACGrid::computeBuoyancy(double dt)
     //target.mV = mV;
 
     // TODO: Your code is here. It modifies target.mV for all y face velocities.
+    GridData forceBuoy; forceBuoy.initialize(0.0);
 
-    target.mV = mV;
     FOR_EACH_CELL {
-        double temperature = mT(i, j, k);
-        double forceBuoy = - theBuoyancyAlpha * theAirDensity
-                    + theBuoyancyBeta * (temperature - theBuoyancyAmbientTemperature);
+        forceBuoy(i, j, k) = - theBuoyancyAlpha * mD(i, j, k)
+                    + theBuoyancyBeta * (mT(i, j, k) - theBuoyancyAmbientTemperature);
+    }
 
-        target.mV(i, j, k) += 0.5 * dt * forceBuoy;
-        target.mV(i, j+1, k) += 0.5 * dt * forceBuoy;
+    FOR_EACH_YFACE {
+        if(j == 0 || j == theDim[MACGrid::Y]) target.mV(i, j, k) = 0;
+        else {
+            double increase = 0.5 * dt * (forceBuoy(i, j - 1, k) + forceBuoy(i, j, k));
+            target.mV(i, j, k) = mV(i, j, k) + increase;
+            //std::cout << target.mV(i, j, k) << " " << mV(i, j, k) << std::endl;
+        }
     }
     // Linghan 2018-04-12
 
@@ -440,6 +451,10 @@ void MACGrid::computeVorticityConfinement(double dt)
     // Second, compute derivative|omega| for each cell respectively.
     // Finally, compute N for each cell and force
 
+    GridData forceConfX; forceConfX.initialize(0.0);
+    GridData forceConfY; forceConfY.initialize(0.0);
+    GridData forceConfZ; forceConfZ.initialize(0.0);
+
     FOR_EACH_CELL {
         double dOmegaX = (omegaLength(i+1, j, k) - omegaLength(i-1, j, k)) / twoSize;
         double dOmegaY = (omegaLength(i, j+1, k) - omegaLength(i, j-1, k)) / twoSize;
@@ -451,14 +466,38 @@ void MACGrid::computeVorticityConfinement(double dt)
 
         vec3 forceConf = theVorticityEpsilon * theCellSize * (N.Cross(omega));
 
-        target.mU(i, j, k) += 0.5 * dt *forceConf[0];
-        target.mU(i+1, j, k) += 0.5 * dt *forceConf[0];
+        forceConfX(i, j, k) = forceConf[0];
+        forceConfY(i, j, k) = forceConf[1];
+        forceConfZ(i, j, k) = forceConf[2];
+    }
 
-        target.mV(i, j, k) += 0.5 * dt *forceConf[1];
-        target.mV(i, j+1, k) += 0.5 * dt *forceConf[1];
+    FOR_EACH_FACE {
+        // X-Face
+        if(isValidFace(MACGrid::X, i, j, k)) {
+            if(i == 0 || i == theDim[MACGrid::X]) target.mU(i, j, k) = 0;
+            else {
+                double increase = 0.5 * dt * (forceConfX(i - 1, j, k) + forceConfX(i, j, k));
+                target.mU(i, j, k) = mU(i, j, k) + increase;
+            }
+        }
 
-        target.mW(i, j, k) += 0.5 * dt *forceConf[2];
-        target.mW(i, j, k+1) += 0.5 * dt *forceConf[2];
+        // Y-Face
+        if(isValidFace(MACGrid::Y, i, j, k)) {
+            if(j == 0 || j == theDim[MACGrid::Y]) target.mV(i, j, k) = 0;
+            else {
+                double increase = 0.5 * dt * (forceConfY(i, j - 1, k) + forceConfY(i, j, k));
+                target.mV(i, j, k) = mV(i, j, k) + increase;
+            }
+        }
+
+        // Z-Face
+        if(isValidFace(MACGrid::Z, i, j, k)) {
+            if(k == 0 || k == theDim[MACGrid::Z]) target.mW(i, j, k) = 0;
+            else {
+                double increase = 0.5 * dt * (forceConfZ(i, j, k - 1) + forceConfY(i, j, k));
+                target.mW(i, j, k) = mW(i, j, k) + increase;
+            }
+        }
     }
 
     // Linghan 2018-04-12
@@ -472,7 +511,7 @@ void MACGrid::computeVorticityConfinement(double dt)
 void MACGrid::addExternalForces(double dt)
 {
    computeBuoyancy(dt);
-   //computeVorticityConfinement(dt);
+   computeVorticityConfinement(dt);
 }
 
 void MACGrid::project(double dt)
@@ -521,7 +560,7 @@ void MACGrid::project(double dt)
             d(i, j, k) = d(i, j, k) + mW(i, j, k) * h_rho_by_dt;
         }
         if(k == theDim[MACGrid::Z]) {
-            d(i, j, k) = d(i, j, k) + mV(i, j, k + 1) * h_rho_by_dt;
+            d(i, j, k) = d(i, j, k) + mW(i, j, k + 1) * h_rho_by_dt;
         }
     }
 
