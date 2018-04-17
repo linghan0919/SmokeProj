@@ -108,7 +108,9 @@ public:
 	// Linghan 2018-04-10
 	enum BackTraceMode { FORWARDEULER, RK2 };
 	static BackTraceMode theBackTraceMode;
-	
+
+    enum SourceType { INIT, CUBECENTER };
+    static SourceType theSourceType;
 	
 	void saveSmoke(const char* fileName);
 	void saveParticle(std::string filename);

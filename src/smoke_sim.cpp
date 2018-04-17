@@ -7,7 +7,7 @@
 #include "basic_math.h"
 #include <fstream>
 
-SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(false)
+SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(false) // Set true for reocording from begining (Linghan)
 {
    reset();
 }
@@ -35,10 +35,11 @@ void SmokeSim::setGridDimensions(int x, int y, int z)
 
 void SmokeSim::step()
 {
-	double dt = 0.04;//0.1;
+	double dt = 0.04;//0.04;//0.1;
 
     // Step0: Gather user forces
-    mGrid.updateSources();
+	//if(mTotalFrameNum < 10)
+    	mGrid.updateSources();
 
     // Step1: Calculate new velocities
     mGrid.advectVelocity(dt); // get Velocity_hat
