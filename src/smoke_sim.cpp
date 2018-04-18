@@ -7,7 +7,7 @@
 #include "basic_math.h"
 #include <fstream>
 
-SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(false) // Set true for reocording from begining (Linghan)
+SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(true) // Set true for reocording from begining (Linghan)
 {
    reset();
 }
@@ -35,10 +35,10 @@ void SmokeSim::setGridDimensions(int x, int y, int z)
 
 void SmokeSim::step()
 {
-	double dt = 0.04;//0.04;//0.1;
+	double dt = 0.1;//0.04 or 0.1;
 
     // Step0: Gather user forces
-	//if(mTotalFrameNum < 10)
+	if(mTotalFrameNum < 25)
     	mGrid.updateSources();
 
     // Step1: Calculate new velocities
@@ -108,7 +108,7 @@ void SmokeSim::drawAxes()
 
 void SmokeSim::grabScreen()  // Code adapted from asst#1 . USING STB_IMAGE_WRITE INSTEAD OF DEVIL.
 {
-	if (mFrameNum > 9999) exit(0);
+	if (mFrameNum > 500) exit(0);
 
 	// Save density field to a .bgeo file
 	std::string densityFile = "../records/DensityFrame" + std::to_string(mFrameNum) + ".bgeo";
@@ -121,10 +121,10 @@ void SmokeSim::grabScreen()  // Code adapted from asst#1 . USING STB_IMAGE_WRITE
 		glReadPixels(0,i,recordWidth,1,GL_RGB, GL_UNSIGNED_BYTE, 
 			bitmapData + (recordWidth * 3 * ((recordHeight-1)-i)));
 	}
-	char anim_filename[2048];
-	snprintf(anim_filename, 2048, "../records/smoke_%04d.png", mFrameNum); 
-	stbi_write_png(anim_filename, recordWidth, recordHeight, 3, bitmapData, recordWidth * 3);
-	delete [] bitmapData;
+	//char anim_filename[2048];
+	//snprintf(anim_filename, 2048, "../records/smoke_%04d.png", mFrameNum);
+	//stbi_write_png(anim_filename, recordWidth, recordHeight, 3, bitmapData, recordWidth * 3);
+	//delete [] bitmapData;
 
 	// Dump out rendering particle data in .bgeo file
 	std::string particleFile = "../records/frame" + std::to_string(mFrameNum) + ".bgeo";

@@ -19,7 +19,7 @@ MACGrid target;
 // NOTE: x -> cols, z -> rows, y -> stacks
 MACGrid::RenderMode MACGrid::theRenderMode = SHEETS; // { CUBES; SHEETS; }
 MACGrid::BackTraceMode MACGrid::theBackTraceMode = RK2; // { FORWARDEULER, RK2 };
-MACGrid::SourceType MACGrid::theSourceType = INIT; // { INIT, CUBECENTER };
+MACGrid::SourceType MACGrid::theSourceType = CUBECENTER; // { INIT, CUBECENTER };
 bool MACGrid::theDisplayVel = false; //true
 
 #define FOR_EACH_CELL \
@@ -137,10 +137,41 @@ void MACGrid::updateSources()
     } // end INIT
 
     else if(theSourceType == CUBECENTER) {
-        // used in [32, 32, 1] grid
-        for (int i = 15; i < 17; i++) {
-            for (int j = 0; j < 5; j++) {
-                for (int k = 15; k < 17; k++) {
+//        // used in [32, 32, 32] grid
+//        for (int i = 12; i < 20; i++) {
+//            for (int j = 0; j < 1; j++) {
+//                for (int k = 12; k < 20; k++) {
+//                    mV(i, j + 1, k) = 5.0;
+//                    mD(i, j, k) = 1.0;
+//                    mT(i, j, k) = 1.0;
+//
+//                    mV(i, j + 2, k) = 5.0;
+//                    mD(i, j, k) = 1.0;
+//                    mT(i, j, k) = 1.0;
+//                }
+//            }
+//        }
+//
+//        // Refresh particles in source.
+//        for (int i = 21; i < 20; i++) {
+//            for (int j = 0; j < 1; j++) {
+//                for (int k = 12; k < 20; k++) {
+//                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+//                    for (int p = 0; p < 10; p++) {
+//                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        vec3 shift(a, b, c);
+//                        vec3 xp = cell_center + shift;
+//                        rendering_particles.push_back(xp);
+//                    }
+//                }
+//            }
+//        }
+        // used in [64, 64, 64] grid
+        for (int i = 20; i < 42; i++) {
+            for (int j = 0; j < 2; j++) {
+                for (int k = 20; k < 42; k++) {
                     mV(i, j + 1, k) = 5.0;
                     mD(i, j, k) = 1.0;
                     mT(i, j, k) = 1.0;
@@ -153,9 +184,9 @@ void MACGrid::updateSources()
         }
 
         // Refresh particles in source.
-        for (int i = 15; i < 17; i++) {
-            for (int j = 0; j < 5; j++) {
-                for (int k = 15; k < 17; k++) {
+        for (int i = 20; i < 42; i++) {
+            for (int j = 0; j < 2; j++) {
+                for (int k = 20; k < 42; k++) {
                     vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
                     for (int p = 0; p < 10; p++) {
                         double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
@@ -516,7 +547,7 @@ void MACGrid::computeVorticityConfinement(double dt)
         double dOmegaZ = (omegaLength(i, j, k+1) - omegaLength(i, j, k-1)) / twoSize;
 
         vec3 dOmega(dOmegaX, dOmegaY, dOmegaZ);
-        vec3 N = dOmega / (dOmega.Length() + 0.00000000000001);
+        vec3 N = dOmega / (dOmega.Length() + 0.0000000001);
         vec3 omega(omegaX(i, j, k), omegaY(i, j, k), omegaZ(i, j, k));
 
         vec3 forceConf = theVorticityEpsilon * theCellSize * (N.Cross(omega));
@@ -598,8 +629,8 @@ void MACGrid::project(double dt)
                     + mV(i, j, k) - mV(i, j + 1, k)
                     + mW(i, j, k) - mW(i, j, k + 1)) * h_rho_by_dt;
 
-        // Boundary Condition
-        /*if(i == 0) {
+        /*// Boundary Condition
+        if(i == 0) {
             d(i, j, k) = d(i, j, k) + mU(i, j, k) * h_rho_by_dt;
         }
         if(i == theDim[MACGrid::X]) {
@@ -623,14 +654,6 @@ void MACGrid::project(double dt)
     // Third, solve for p using preconditionedConjugateGradient() function
     preconditionedConjugateGradient(AMatrix, target.mP, d, 100, 0.000001);
 
-    //========================== for debug ====================================
-    /*FOR_EACH_CELL {
-        std::cout << i << " " << j << " " << k << std::endl;
-        double p = AMatrix.diag(i, j, k) * target.mP(i, j, k) - target.mP(i+1,j,k) - target.mP(i-1,j,k) - target.mP(i,j+1,k)
-                    - target.mP(i,j-1,k) - target.mP(i,j,k+1) - target.mP(i,j,k-1);
-        std::cout << p << " || " << d(i, j, k) << std::endl;
-    }*/
-    //=========================================================================
 
     // Finally, subtract pressure from our velocity
     // u^(n+1)_i,j,k = u^_i,j,k - dt/(airDensity*h) * (P_i,j,k - P_i-1,j,k)
