@@ -38,6 +38,7 @@ protected:
 	// Simulation
 	void computeBuoyancy(double dt);
 	void computeVorticityConfinement(double dt);
+	void computeWind(); // Linghan
 
 	// Rendering
 	struct Cube { vec3 pos; vec4 color; double dist; };
@@ -94,6 +95,13 @@ protected:
 	GridDataMatrix AMatrix;
 	GridData precon;
 
+	// Linghan 2018-04-18
+	int boxMin = 10; int boxMax = 22; // if set boxMin = 100, boxMax = -100, no box
+	//int boxMin = 100, boxMax = -100;
+	double boxMinPos = (boxMin - 1) * theCellSize;
+	double boxMaxPos = boxMax * theCellSize;
+	bool isInBox(int i, int j, int k);
+    bool isBoxBoundaryFace(int dimension, int i, int j, int k);
 
 public:
 

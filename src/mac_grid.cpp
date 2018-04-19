@@ -19,7 +19,7 @@ MACGrid target;
 // NOTE: x -> cols, z -> rows, y -> stacks
 MACGrid::RenderMode MACGrid::theRenderMode = SHEETS; // { CUBES; SHEETS; }
 MACGrid::BackTraceMode MACGrid::theBackTraceMode = RK2; // { FORWARDEULER, RK2 };
-MACGrid::SourceType MACGrid::theSourceType = TWOSOURCE; // { INIT, CUBECENTER, TWOSOURCE };
+MACGrid::SourceType MACGrid::theSourceType = CUBECENTER; // { INIT, CUBECENTER, TWOSOURCE };
 bool MACGrid::theDisplayVel = false; //true
 
 #define FOR_EACH_CELL \
@@ -137,64 +137,69 @@ void MACGrid::updateSources()
     } // end INIT
 
     else if(theSourceType == CUBECENTER) {
-//        // used in [32, 32, 32] grid
-//        for (int i = 12; i < 20; i++) {
-//            for (int j = 0; j < 1; j++) {
-//                for (int k = 12; k < 20; k++) {
-//                    mV(i, j + 1, k) = 5.0;
-//                    mD(i, j, k) = 1.0;
-//                    mT(i, j, k) = 1.0;
-//
-//                    mV(i, j + 2, k) = 5.0;
-//                    mD(i, j, k) = 1.0;
-//                    mT(i, j, k) = 1.0;
-//                }
-//            }
-//        }
-//
-//        // Refresh particles in source.
-//        for (int i = 21; i < 20; i++) {
-//            for (int j = 0; j < 1; j++) {
-//                for (int k = 12; k < 20; k++) {
-//                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
-//                    for (int p = 0; p < 10; p++) {
-//                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        vec3 shift(a, b, c);
-//                        vec3 xp = cell_center + shift;
-//                        rendering_particles.push_back(xp);
-//                    }
-//                }
-//            }
-//        }
-        // used in [64, 64, 64] grid
-        for (int i = 20; i < 42; i++) {
-            for (int j = 0; j < 2; j++) {
-                for (int k = 20; k < 42; k++) {
-                    mV(i, j + 1, k) = 5.0;
-                    mD(i, j, k) = 1.0;
-                    mT(i, j, k) = 1.0;
+        if(theDim[0] == 32) {
+            // used in [32, 32, 32] grid
+            for (int i = 12; i < 20; i++) {
+                for (int j = 0; j < 1; j++) {
+                    for (int k = 12; k < 20; k++) {
+                        mV(i, j + 1, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
 
-                    mV(i, j + 2, k) = 5.0;
-                    mD(i, j, k) = 1.0;
-                    mT(i, j, k) = 1.0;
+                        mV(i, j + 2, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
+                }
+            }
+
+            // Refresh particles in source.
+            for (int i = 21; i < 20; i++) {
+                for (int j = 0; j < 1; j++) {
+                    for (int k = 12; k < 20; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
+                    }
                 }
             }
         }
 
-        // Refresh particles in source.
-        for (int i = 20; i < 42; i++) {
-            for (int j = 0; j < 2; j++) {
-                for (int k = 20; k < 42; k++) {
-                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
-                    for (int p = 0; p < 10; p++) {
-                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        vec3 shift(a, b, c);
-                        vec3 xp = cell_center + shift;
-                        rendering_particles.push_back(xp);
+        else if(theDim[0] == 64) {
+            // used in [64, 64, 64] grid
+            for (int i = 20; i < 42; i++) {
+                for (int j = 0; j < 2; j++) {
+                    for (int k = 20; k < 42; k++) {
+                        mV(i, j + 1, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+
+                        mV(i, j + 2, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
+                }
+            }
+
+            // Refresh particles in source.
+            for (int i = 20; i < 42; i++) {
+                for (int j = 0; j < 2; j++) {
+                    for (int k = 20; k < 42; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
                     }
                 }
             }
@@ -333,128 +338,137 @@ void MACGrid::advectVelocity(double dt)
         //std::cout << i << ", " << j << ", " << k << ": " << std::endl;
 
         if(isValidFace(MACGrid::X, i, j, k)) {
-            vec3 curPosXface = getFacePosition(MACGrid::X, i, j, k);
-            vec3 curVelXface = getVelocity(curPosXface);
-
-            /*
-            double curVely = 0, curVelz = 0;
-
-            // Average mV of 4 neighboring Y faces
-            if(isValidFace(MACGrid::Y, i-1, j, k)) curVely += mV(i-1, j, k);
-            if(isValidFace(MACGrid::Y, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
-            if(isValidFace(MACGrid::Y, i, j, k)) curVely += mV(i, j, k);
-            if(isValidFace(MACGrid::Y, i, j+1, k)) curVely += mV(i, j+1, k);
-            curVely *= 0.25;
-
-            // Average mW of 4 neighboring Z faces
-            if(isValidFace(MACGrid::Z, i-1, j, k)) curVelz += mW(i-1, j, k);
-            if(isValidFace(MACGrid::Z, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
-            if(isValidFace(MACGrid::Z, i, j, k)) curVelz += mW(i, j, k);
-            if(isValidFace(MACGrid::Z, i, j, k+1)) curVelz += mW(i, j, k+1);
-            curVelz *= 0.25;
-
-            vec3 curVelXface(mU(i, j, k), curVely, curVelz);*/
-            vec3 oldPosXface;
-
-            if(theBackTraceMode == FORWARDEULER) {
-                // Forward Euler
-                oldPosXface = curPosXface - dt * curVelXface;
+            if(i == 0 || i == theDim[MACGrid::X] || isBoxBoundaryFace(MACGrid::X, i, j, k)) {
+                target.mU(i, j, k) = 0;
             }
+            else {
+                vec3 curPosXface = getFacePosition(MACGrid::X, i, j, k);
+                vec3 curVelXface = getVelocity(curPosXface);
 
-            else if(theBackTraceMode == RK2) {
-                // RK2
-                vec3 midPosX = curPosXface - 0.5 * dt * curVelXface;
-                vec3 clippedMidPosX = clipToGrid(midPosX, curPosXface);
-                vec3 midVelX = getVelocity(clippedMidPosX);
-                oldPosXface = curPosXface - dt * midVelX;
+                /*
+                double curVely = 0, curVelz = 0;
+
+                // Average mV of 4 neighboring Y faces
+                if(isValidFace(MACGrid::Y, i-1, j, k)) curVely += mV(i-1, j, k);
+                if(isValidFace(MACGrid::Y, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
+                if(isValidFace(MACGrid::Y, i, j, k)) curVely += mV(i, j, k);
+                if(isValidFace(MACGrid::Y, i, j+1, k)) curVely += mV(i, j+1, k);
+                curVely *= 0.25;
+
+                // Average mW of 4 neighboring Z faces
+                if(isValidFace(MACGrid::Z, i-1, j, k)) curVelz += mW(i-1, j, k);
+                if(isValidFace(MACGrid::Z, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
+                if(isValidFace(MACGrid::Z, i, j, k)) curVelz += mW(i, j, k);
+                if(isValidFace(MACGrid::Z, i, j, k+1)) curVelz += mW(i, j, k+1);
+                curVelz *= 0.25;
+
+                vec3 curVelXface(mU(i, j, k), curVely, curVelz);*/
+                vec3 oldPosXface;
+
+                if (theBackTraceMode == FORWARDEULER) {
+                    // Forward Euler
+                    oldPosXface = curPosXface - dt * curVelXface;
+                } else if (theBackTraceMode == RK2) {
+                    // RK2
+                    vec3 midPosX = curPosXface - 0.5 * dt * curVelXface;
+                    vec3 clippedMidPosX = clipToGrid(midPosX, curPosXface);
+                    vec3 midVelX = getVelocity(clippedMidPosX);
+                    oldPosXface = curPosXface - dt * midVelX;
+                }
+
+                vec3 clippedOldPosX = clipToGrid(oldPosXface, curPosXface);
+                vec3 newVelX = getVelocity(clippedOldPosX);
+                target.mU(i, j, k) = newVelX[0];
             }
-
-            vec3 clippedOldPosX = clipToGrid(oldPosXface, curPosXface);
-            vec3 newVelX = getVelocity(clippedOldPosX);
-            target.mU(i, j, k) = newVelX[0];
         }
 
         if(isValidFace(MACGrid::Y, i, j, k)) {
-            vec3 curPosYface = getFacePosition(MACGrid::Y, i, j, k);
-            vec3 curVelYface = getVelocity(curPosYface);
-
-            /*
-            double curVelx = 0, curVelz = 0;
-
-            // Average mU of 4 neighboring X faces
-            if(isValidFace(MACGrid::X, i, j-1, k)) curVelx += mU(i, j-1, k);
-            if(isValidFace(MACGrid::X, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
-            if(isValidFace(MACGrid::X, i, j, k)) curVelx += mU(i, j, k);
-            if(isValidFace(MACGrid::X, i+1, j, k)) curVelx += mU(i+1, j, k);
-            curVelx *= 0.25;
-
-            // Average mW of 4 neighboring Z faces
-            if(isValidFace(MACGrid::Z, i-1, j, k)) curVelz += mW(i-1, j, k);
-            if(isValidFace(MACGrid::Z, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
-            if(isValidFace(MACGrid::Z, i, j, k)) curVelz += mW(i, j, k);
-            if(isValidFace(MACGrid::Z, i, j, k+1)) curVelz += mW(i, j, k+1);
-            curVelz *= 0.25;
-
-            vec3 curVelYface(curVelx, mV(i, j, k), curVelz);*/
-            vec3 oldPosYface;
-
-            if(theBackTraceMode == FORWARDEULER) {
-                // Forward Euler
-                oldPosYface = curPosYface - dt * curVelYface;
+            if(j == 0 || j == theDim[MACGrid::Y] || isBoxBoundaryFace(MACGrid::Y, i, j, k)) {
+                target.mV(i, j, k) = 0;
             }
+            else {
+                vec3 curPosYface = getFacePosition(MACGrid::Y, i, j, k);
+                vec3 curVelYface = getVelocity(curPosYface);
 
-            else if(theBackTraceMode == RK2) {
-                // RK2
-                vec3 midPosY = curPosYface - 0.5 * dt * curVelYface;
-                vec3 clippedMidPosY = clipToGrid(midPosY, curPosYface);
-                vec3 midVelY = getVelocity(clippedMidPosY);
-                oldPosYface = curPosYface - dt * midVelY;
+                /*
+                double curVelx = 0, curVelz = 0;
+
+                // Average mU of 4 neighboring X faces
+                if(isValidFace(MACGrid::X, i, j-1, k)) curVelx += mU(i, j-1, k);
+                if(isValidFace(MACGrid::X, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
+                if(isValidFace(MACGrid::X, i, j, k)) curVelx += mU(i, j, k);
+                if(isValidFace(MACGrid::X, i+1, j, k)) curVelx += mU(i+1, j, k);
+                curVelx *= 0.25;
+
+                // Average mW of 4 neighboring Z faces
+                if(isValidFace(MACGrid::Z, i-1, j, k)) curVelz += mW(i-1, j, k);
+                if(isValidFace(MACGrid::Z, i-1, j, k+1)) curVelz += mW(i-1, j, k+1);
+                if(isValidFace(MACGrid::Z, i, j, k)) curVelz += mW(i, j, k);
+                if(isValidFace(MACGrid::Z, i, j, k+1)) curVelz += mW(i, j, k+1);
+                curVelz *= 0.25;
+
+                vec3 curVelYface(curVelx, mV(i, j, k), curVelz);*/
+                vec3 oldPosYface;
+
+                if (theBackTraceMode == FORWARDEULER) {
+                    // Forward Euler
+                    oldPosYface = curPosYface - dt * curVelYface;
+                } else if (theBackTraceMode == RK2) {
+                    // RK2
+                    vec3 midPosY = curPosYface - 0.5 * dt * curVelYface;
+                    vec3 clippedMidPosY = clipToGrid(midPosY, curPosYface);
+                    vec3 midVelY = getVelocity(clippedMidPosY);
+                    oldPosYface = curPosYface - dt * midVelY;
+                }
+
+                vec3 clippedOldPosY = clipToGrid(oldPosYface, curPosYface);
+                vec3 newVelY = getVelocity(clippedOldPosY);
+                target.mV(i, j, k) = newVelY[1];
             }
-
-            vec3 clippedOldPosY = clipToGrid(oldPosYface, curPosYface);
-            vec3 newVelY = getVelocity(clippedOldPosY);
-            target.mV(i, j, k) = newVelY[1];
         }
 
         if(isValidFace(MACGrid::Z, i, j, k)) {
-            vec3 curPosZface = getFacePosition(MACGrid::Z, i, j, k);
-            vec3 curVelZface = getVelocity(curPosZface);
-
-            /*double curVelx = 0, curVely = 0;
-
-            // Average mU of 4 neighboring X faces
-            if(isValidFace(MACGrid::X, i, j-1, k)) curVelx += mU(i, j-1, k);
-            if(isValidFace(MACGrid::X, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
-            if(isValidFace(MACGrid::X, i, j, k)) curVelx += mU(i, j, k);
-            if(isValidFace(MACGrid::X, i+1, j, k)) curVelx += mU(i+1, j, k);
-            curVelx *= 0.25;
-
-            // Average mV of 4 neighboring Y faces
-            if(isValidFace(MACGrid::X, i-1, j, k)) curVely += mV(i-1, j, k);
-            if(isValidFace(MACGrid::X, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
-            if(isValidFace(MACGrid::X, i, j, k)) curVely += mV(i, j, k);
-            if(isValidFace(MACGrid::X, i, j+1, k)) curVely += mV(i, j+1, k);
-            curVely *= 0.25;
-
-            vec3 curVelZface(curVelx, curVely, mW(i, j, k));*/
-            vec3 oldPosZface;
-
-            if(theBackTraceMode == FORWARDEULER) {
-                // Forward Euler
-                oldPosZface = curPosZface - dt * curVelZface;
+            if(k == 0 || k == theDim[MACGrid::Z] || isBoxBoundaryFace(MACGrid::Z, i, j, k)) {
+                target.mW(i, j, k) = 0;
             }
+            else {
+                vec3 curPosZface = getFacePosition(MACGrid::Z, i, j, k);
+                vec3 curVelZface = getVelocity(curPosZface);
 
-            else if(theBackTraceMode == RK2) {
-                // RK2
-                vec3 midPosZ = curPosZface - 0.5 * dt * curVelZface;
-                vec3 clippedMidPosZ = clipToGrid(midPosZ, curPosZface);
-                vec3 midVelZ = getVelocity(clippedMidPosZ);
-                oldPosZface = curPosZface - dt * midVelZ;
+                /*double curVelx = 0, curVely = 0;
+
+                // Average mU of 4 neighboring X faces
+                if(isValidFace(MACGrid::X, i, j-1, k)) curVelx += mU(i, j-1, k);
+                if(isValidFace(MACGrid::X, i+1, j-1, k)) curVelx += mU(i+1, j-1, k);
+                if(isValidFace(MACGrid::X, i, j, k)) curVelx += mU(i, j, k);
+                if(isValidFace(MACGrid::X, i+1, j, k)) curVelx += mU(i+1, j, k);
+                curVelx *= 0.25;
+
+                // Average mV of 4 neighboring Y faces
+                if(isValidFace(MACGrid::X, i-1, j, k)) curVely += mV(i-1, j, k);
+                if(isValidFace(MACGrid::X, i-1, j+1, k)) curVely += mV(i-1, j+1, k);
+                if(isValidFace(MACGrid::X, i, j, k)) curVely += mV(i, j, k);
+                if(isValidFace(MACGrid::X, i, j+1, k)) curVely += mV(i, j+1, k);
+                curVely *= 0.25;
+
+                vec3 curVelZface(curVelx, curVely, mW(i, j, k));*/
+                vec3 oldPosZface;
+
+                if (theBackTraceMode == FORWARDEULER) {
+                    // Forward Euler
+                    oldPosZface = curPosZface - dt * curVelZface;
+                } else if (theBackTraceMode == RK2) {
+                    // RK2
+                    vec3 midPosZ = curPosZface - 0.5 * dt * curVelZface;
+                    vec3 clippedMidPosZ = clipToGrid(midPosZ, curPosZface);
+                    vec3 midVelZ = getVelocity(clippedMidPosZ);
+                    oldPosZface = curPosZface - dt * midVelZ;
+                }
+
+                vec3 clippedOldPosZ = clipToGrid(oldPosZface, curPosZface);
+                vec3 newVelZ = getVelocity(clippedOldPosZ);
+                target.mW(i, j, k) = newVelZ[2];
             }
-
-            vec3 clippedOldPosZ = clipToGrid(oldPosZface, curPosZface);
-            vec3 newVelZ = getVelocity(clippedOldPosZ);
-            target.mW(i, j, k) = newVelZ[2];
         }
 
     }
@@ -476,6 +490,8 @@ void MACGrid::advectTemperature(double dt)
 
     // TODO: Your code is here. It builds target.mT for all cells.
     FOR_EACH_CELL {
+        if(isInBox(i, j, k)) continue;
+
         vec3 curPos = getCenter(i, j, k);
         vec3 curVel = getVelocity(curPos);
 
@@ -532,6 +548,8 @@ void MACGrid::advectDensity(double dt)
 
     // TODO: Your code is here. It builds target.mD for all cells.
 	FOR_EACH_CELL {
+        if(isInBox(i, j, k)) continue;
+
 		vec3 curPos = getCenter(i, j, k);
         vec3 curVel = getVelocity(curPos);
 
@@ -570,7 +588,7 @@ void MACGrid::computeBuoyancy(double dt)
 
     // TODO: Your code is here. It modifies target.mV for all y face velocities.
     FOR_EACH_YFACE {
-        if(j == 0 || j == theDim[MACGrid::Y]) target.mV(i, j, k) = 0;
+        if(j == 0 || j == theDim[MACGrid::Y] || isBoxBoundaryFace(MACGrid::Y, i, j, k)) target.mV(i, j, k) = 0;
         else {
             vec3 pos = getFacePosition(MACGrid::Y, i, j, k);
             double density = getDensity(pos);
@@ -609,9 +627,9 @@ void MACGrid::computeVorticityConfinement(double dt)
 	// STARTED.
 
     // TODO: Get rid of this line after you implement yours
-	target.mU = mU;
-	target.mV = mV;
-	target.mW = mW;
+	//target.mU = mU;
+	//target.mV = mV;
+	//target.mW = mW;
 
     // TODO: Your code is here. It modifies target.mU,mV,mW for all faces.
     GridData omegaX; omegaX.initialize(0.0);
@@ -622,6 +640,8 @@ void MACGrid::computeVorticityConfinement(double dt)
     // First, for every cell, compute omega vector, and then |omega|
     double twoSize = 2 * theCellSize;
     FOR_EACH_CELL {
+        if(isInBox(i, j, k)) continue;
+
         double w_i_jplus1_k = getVelocityZ(getCenter(i, j+1, k));
         double w_i_jminus1_k = getVelocityZ(getCenter(i, j-1, k));
         double v_i_j_kplus1 = getVelocityY(getCenter(i, j, k+1));
@@ -652,6 +672,8 @@ void MACGrid::computeVorticityConfinement(double dt)
     GridData forceConfZ; forceConfZ.initialize(0.0);
 
     FOR_EACH_CELL {
+        if(isInBox(i, j, k)) continue;
+
         double dOmegaX = (omegaLength(i+1, j, k) - omegaLength(i-1, j, k)) / twoSize;
         double dOmegaY = (omegaLength(i, j+1, k) - omegaLength(i, j-1, k)) / twoSize;
         double dOmegaZ = (omegaLength(i, j, k+1) - omegaLength(i, j, k-1)) / twoSize;
@@ -670,7 +692,7 @@ void MACGrid::computeVorticityConfinement(double dt)
     FOR_EACH_FACE {
         // X-Face
         if(isValidFace(MACGrid::X, i, j, k)) {
-            if(i == 0 || i == theDim[MACGrid::X]) target.mU(i, j, k) = 0;
+            if(i == 0 || i == theDim[MACGrid::X] || isBoxBoundaryFace(MACGrid::X, i, j, k)) target.mU(i, j, k) = 0;
             else {
                 double increase = 0.5 * dt * (forceConfX(i - 1, j, k) + forceConfX(i, j, k));
                 target.mU(i, j, k) = mU(i, j, k) + increase;
@@ -679,7 +701,7 @@ void MACGrid::computeVorticityConfinement(double dt)
 
         // Y-Face
         if(isValidFace(MACGrid::Y, i, j, k)) {
-            if(j == 0 || j == theDim[MACGrid::Y]) target.mV(i, j, k) = 0;
+            if(j == 0 || j == theDim[MACGrid::Y] || isBoxBoundaryFace(MACGrid::Y, i, j, k)) target.mV(i, j, k) = 0;
             else {
                 double increase = 0.5 * dt * (forceConfY(i, j - 1, k) + forceConfY(i, j, k));
                 target.mV(i, j, k) = mV(i, j, k) + increase;
@@ -688,7 +710,7 @@ void MACGrid::computeVorticityConfinement(double dt)
 
         // Z-Face
         if(isValidFace(MACGrid::Z, i, j, k)) {
-            if(k == 0 || k == theDim[MACGrid::Z]) target.mW(i, j, k) = 0;
+            if(k == 0 || k == theDim[MACGrid::Z] || isBoxBoundaryFace(MACGrid::Z, i, j, k)) target.mW(i, j, k) = 0;
             else {
                 double increase = 0.5 * dt * (forceConfZ(i, j, k - 1) + forceConfZ(i, j, k));
                 target.mW(i, j, k) = mW(i, j, k) + increase;
@@ -704,10 +726,28 @@ void MACGrid::computeVorticityConfinement(double dt)
     mW = target.mW;
 }
 
+void MACGrid::computeWind() {
+
+    FOR_EACH_FACE {
+                // X-Face
+         if (isValidFace(MACGrid::X, i, j, k)) {
+             if (i == 0 || i == theDim[MACGrid::X]) target.mU(i, j, k) = 0;
+             else {
+                 if(j < 20) target.mU(i, j, k) = mU(i, j, k) + 1;
+                 else if(j < 40) target.mU(i, j, k) = mU(i, j, k) - 1;
+                 else target.mU(i, j, k) = mU(i, j, k) + 1;
+             }
+         }
+    }
+
+    mU = target.mU;
+}
+
 void MACGrid::addExternalForces(double dt)
 {
    computeBuoyancy(dt);
    computeVorticityConfinement(dt);
+   //computeWind();
 }
 
 void MACGrid::project(double dt)
@@ -735,6 +775,11 @@ void MACGrid::project(double dt)
     double dt_by_h_rho = 1 / h_rho_by_dt;
 
     FOR_EACH_CELL {
+        if(isInBox(i, j, k)) {
+            d(i, j, k) = 0;
+            continue;
+        }
+
         d(i, j, k) = (mU(i, j, k) - mU(i + 1, j, k)
                     + mV(i, j, k) - mV(i, j + 1, k)
                     + mW(i, j, k) - mW(i, j, k + 1)) * h_rho_by_dt;
@@ -764,23 +809,32 @@ void MACGrid::project(double dt)
     // Third, solve for p using preconditionedConjugateGradient() function
     preconditionedConjugateGradient(AMatrix, target.mP, d, 100, 0.000001);
 
+    for(int k = boxMin; k <= boxMax; k++) {
+        for(int j = boxMin; j <= boxMax; j++) {
+            for(int i = boxMin; i <= boxMax; i++) {
+                PRINT_LINE(target.mP(i, j, k));
+            }
+        }
+    }
+    PRINT_LINE("--------------------------------------------------------------");
+
 
     // Finally, subtract pressure from our velocity
     // u^(n+1)_i,j,k = u^_i,j,k - dt/(airDensity*h) * (P_i,j,k - P_i-1,j,k)
     //               = u^*_i,j,k - h * (mP_i,j,k - mP_i-1,j,k)
     FOR_EACH_FACE {
         if(isValidFace(MACGrid::X, i, j, k)) {
-            if(i == 0 || i == theDim[MACGrid::X]) target.mU(i, j, k) = 0;
+            if(i == 0 || i == theDim[MACGrid::X] || isBoxBoundaryFace(MACGrid::X, i, j, k)) target.mU(i, j, k) = 0;
             else target.mU(i, j, k) = mU(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i-1, j, k));
         }
 
         if(isValidFace(MACGrid::Y, i, j, k)) {
-            if(j == 0 || j == theDim[MACGrid::Y]) target.mV(i, j, k) = 0;
+            if(j == 0 || j == theDim[MACGrid::Y] || isBoxBoundaryFace(MACGrid::Y, i, j, k)) target.mV(i, j, k) = 0;
             else target.mV(i, j, k) = mV(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j-1, k));
         }
 
         if(isValidFace(MACGrid::Z, i, j, k)) {
-            if(k == 0 || k == theDim[MACGrid::Z]) target.mW(i, j, k) = 0;
+            if(k == 0 || k == theDim[MACGrid::Z] || isBoxBoundaryFace(MACGrid::Z, i, j, k)) target.mW(i, j, k) = 0;
             else target.mW(i, j, k) = mW(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j, k-1));
         }
 
@@ -974,6 +1028,24 @@ vec3 MACGrid::clipToGrid(const vec3& outsidePoint, const vec3& insidePoint) {
 			double ratio = newDistanceI / distance[i];
 			clippedPoint = insidePoint + distance * ratio;
 		}
+
+        // Linghan 2018-04-18. If point in box
+        if (clippedPoint[0] > boxMinPos && clippedPoint[0] < boxMaxPos &&
+            clippedPoint[1] > boxMinPos && clippedPoint[1] < boxMaxPos &&
+            clippedPoint[2] > boxMinPos && clippedPoint[2] < boxMaxPos) {
+            if (2 * clippedPoint[i] < (boxMaxPos + boxMinPos)) {
+                vec3 distance = clippedPoint - insidePoint;
+                double newDistanceI = boxMinPos - insidePoint[i];
+                double ratio = newDistanceI / distance[i];
+                clippedPoint = insidePoint + distance * ratio;
+            }
+            else {
+                vec3 distance = clippedPoint - insidePoint;
+                double newDistanceI = boxMaxPos - insidePoint[i];
+                double ratio = newDistanceI / distance[i];
+                clippedPoint = insidePoint + distance * ratio;
+            }
+        }
 	}
 
 #ifdef _DEBUG
@@ -1015,6 +1087,11 @@ bool MACGrid::isValidCell(int i, int j, int k)
 		return false;
 	}
 
+    // Linghan 2018-04-18
+    if (isInBox(i, j, k)) {
+        return false;
+    }
+
 	return true;
 }
 
@@ -1025,14 +1102,26 @@ bool MACGrid::isValidFace(int dimension, int i, int j, int k)
 		if (i > theDim[MACGrid::X] || j >= theDim[MACGrid::Y] || k >= theDim[MACGrid::Z]) {
 			return false;
 		}
+        // Linghan 2018-04-18
+        if (i > boxMin && i <= boxMax && j >= boxMin && j <= boxMax && k >= boxMin && k <= boxMax)
+            return false;
+
 	} else if (dimension == 1) {
 		if (i >= theDim[MACGrid::X] || j > theDim[MACGrid::Y] || k >= theDim[MACGrid::Z]) {
 			return false;
 		}
+        // Linghan 2018-04-18
+        if (i >= boxMin && i <= boxMax && j > boxMin && j <= boxMax && k >= boxMin && k <= boxMax)
+            return false;
+
 	} else if (dimension == 2) {
 		if (i >= theDim[MACGrid::X] || j >= theDim[MACGrid::Y] || k > theDim[MACGrid::Z]) {
 			return false;
 		}
+
+        // Linghan 2018-04-18
+        if (i >= boxMin && i <= boxMax && j >= boxMin && j <= boxMax && k > boxMin && k <= boxMax)
+            return false;
 	}
 
 	if (i < 0 || j < 0 || k < 0) {
@@ -1042,6 +1131,36 @@ bool MACGrid::isValidFace(int dimension, int i, int j, int k)
 	return true;
 }
 
+// Linghan 2018-04-18
+bool MACGrid::isInBox(int i, int j, int k)
+{
+    if (i < boxMin) return false;
+    if (i > boxMax) return false;
+    if (j < boxMin) return false;
+    if (j > boxMax) return false;
+    if (k < boxMin) return false;
+    if (k > boxMax) return false;
+    return true;
+}
+
+// Linghan 2018-04-18
+bool MACGrid::isBoxBoundaryFace(int dimension, int i, int j, int k)
+{
+    if (dimension == 0) {
+        if (i == boxMin && i == boxMax+1 && j >= boxMin && j <= boxMax && k >= boxMin && k <= boxMax)
+            return true;
+
+    } else if (dimension == 1) {
+        if (i >= boxMin && i <= boxMax && j == boxMin && j == boxMax+1 && k >= boxMin && k <= boxMax)
+            return true;
+
+    } else if (dimension == 2) {
+        if (i >= boxMin && i <= boxMax && j >= boxMin && j <= boxMax && k == boxMin && k == boxMax+1)
+            return true;
+    }
+
+    return false;
+}
 
 vec3 MACGrid::getFacePosition(int dimension, int i, int j, int k)
 {
@@ -1063,28 +1182,34 @@ void MACGrid::calculateAMatrix() {
     //      fluid neighbor -> -1; others -> 0
 	FOR_EACH_CELL {
 
+        // Linghan 2018-04-18
+        if(isInBox(i, j, k)) {
+            AMatrix.diag(i,j,k) = 1;
+            continue;
+        }
+
 		int numFluidNeighbors = 0;
-		if (i-1 >= 0) {
+		if (i-1 >= 0 && !isInBox(i-1, j, k)) {
 			AMatrix.plusI(i-1,j,k) = -1;
 			numFluidNeighbors++;
 		}
-		if (i+1 < theDim[MACGrid::X]) {
+		if (i+1 < theDim[MACGrid::X] && !isInBox(i+1, j, k)) {
 			AMatrix.plusI(i,j,k) = -1;
 			numFluidNeighbors++;
 		}
-		if (j-1 >= 0) {
+		if (j-1 >= 0 && !isInBox(i, j-1, k)) {
 			AMatrix.plusJ(i,j-1,k) = -1;
 			numFluidNeighbors++;
 		}
-		if (j+1 < theDim[MACGrid::Y]) {
+		if (j+1 < theDim[MACGrid::Y] && !isInBox(i, j+1, k)) {
 			AMatrix.plusJ(i,j,k) = -1;
 			numFluidNeighbors++;
 		}
-		if (k-1 >= 0) {
+		if (k-1 >= 0 && !isInBox(i, j, k-1)) {
 			AMatrix.plusK(i,j,k-1) = -1;
 			numFluidNeighbors++;
 		}
-		if (k+1 < theDim[MACGrid::Z]) {
+		if (k+1 < theDim[MACGrid::Z] && !isInBox(i, j, k+1)) {
 			AMatrix.plusK(i,j,k) = -1;
 			numFluidNeighbors++;
 		}
@@ -1110,12 +1235,12 @@ bool MACGrid::preconditionedConjugateGradient(const GridDataMatrix & A, GridData
 	*/
 	GridData z; z.initialize();
 	applyPreconditioner(r, A, z); // Auxillary vector.
-	/*
+    /*
 	PRINT_LINE("z: ");
 	FOR_EACH_CELL {
 		PRINT_LINE(z(i,j,k));
 	}
-	*/
+    */
 
 	GridData s = z; // Search vector;
 
@@ -1206,7 +1331,8 @@ void MACGrid::applyPreconditioner(const GridData & r, const GridDataMatrix & A, 
                                - A.plusJ(i, j - 1, k) * precon(i, j - 1, k) * q(i, j - 1, k)
                                - A.plusK(i, j, k - 1) * precon(i, j, k - 1) * q(i, j, k - 1);
                     q(i, j, k) = t * precon(i, j, k);
-                    //}
+                    //std::cout << t << " " << r(i, j, k) << " " << q(i, j, k) << std::endl;
+                                //}
                 }
         // Solve L^Tz = q for z:
         FOR_EACH_CELL_REVERSE {
