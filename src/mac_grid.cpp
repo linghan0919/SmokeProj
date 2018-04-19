@@ -19,7 +19,7 @@ MACGrid target;
 // NOTE: x -> cols, z -> rows, y -> stacks
 MACGrid::RenderMode MACGrid::theRenderMode = SHEETS; // { CUBES; SHEETS; }
 MACGrid::BackTraceMode MACGrid::theBackTraceMode = RK2; // { FORWARDEULER, RK2 };
-MACGrid::SourceType MACGrid::theSourceType = CUBECENTER; // { INIT, CUBECENTER };
+MACGrid::SourceType MACGrid::theSourceType = TWOSOURCE; // { INIT, CUBECENTER, TWOSOURCE };
 bool MACGrid::theDisplayVel = false; //true
 
 #define FOR_EACH_CELL \
@@ -187,6 +187,116 @@ void MACGrid::updateSources()
         for (int i = 20; i < 42; i++) {
             for (int j = 0; j < 2; j++) {
                 for (int k = 20; k < 42; k++) {
+                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                    for (int p = 0; p < 10; p++) {
+                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                        vec3 shift(a, b, c);
+                        vec3 xp = cell_center + shift;
+                        rendering_particles.push_back(xp);
+                    }
+                }
+            }
+        }
+    }
+
+    else if(theSourceType == TWOSOURCE) {
+//        // used in [32, 32, 32] grid
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 15; j < 17; j++) {
+//                for (int k = 15; k < 17; k++) {
+//                    mU(i, j + 1, k) = 5.0;
+//                    mD(i, j, k) = 1.0;
+//                    mT(i, j, k) = 1.0;
+//                }
+//            }
+//        }
+//
+//        for (int i = theDim[0]-2; i < theDim[0]; i++) {
+//            for (int j = 15; j < 17; j++) {
+//                for (int k = 15; k < 17; k++) {
+//                    mU(i, j + 1, k) = -5.0;
+//                    mD(i, j, k) = 1.0;
+//                    mT(i, j, k) = 1.0;
+//                }
+//            }
+//        }
+//
+//        // Refresh particles in source.
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 15; j < 17; j++) {
+//                for (int k = 15; k < 17; k++) {
+//                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+//                    for (int p = 0; p < 10; p++) {
+//                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        vec3 shift(a, b, c);
+//                        vec3 xp = cell_center + shift;
+//                        rendering_particles.push_back(xp);
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (int i = theDim[0]-2; i < theDim[0]; i++) {
+//            for (int j = 15; j < 17; j++) {
+//                for (int k = 15; k < 17; k++) {
+//                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+//                    for (int p = 0; p < 10; p++) {
+//                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+//                        vec3 shift(a, b, c);
+//                        vec3 xp = cell_center + shift;
+//                        rendering_particles.push_back(xp);
+//                    }
+//                }
+//            }
+//        }
+
+        // used in [64, 64, 64] grid
+        for (int i = 0; i < 2; i++) {
+            for (int j = 10; j < 15; j++) {
+                for (int k = 30; k < 35; k++) {
+                    mU(i, j + 1, k) = 5.0;
+                    mD(i, j, k) = 1.0;
+                    mT(i, j, k) = 1.0;
+                }
+            }
+        }
+
+        for (int i = theDim[0]-2; i < theDim[0]; i++) {
+            for (int j = 10; j < 15; j++) {
+                for (int k = 30; k < 35; k++) {
+                    mU(i, j + 1, k) = -5.0;
+                    mD(i, j, k) = 1.0;
+                    mT(i, j, k) = 1.0;
+                }
+            }
+        }
+
+        // Refresh particles in source.
+        for (int i = 0; i < 2; i++) {
+            for (int j = 10; j < 15; j++) {
+                for (int k = 30; k < 35; k++) {
+                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                    for (int p = 0; p < 10; p++) {
+                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                        vec3 shift(a, b, c);
+                        vec3 xp = cell_center + shift;
+                        rendering_particles.push_back(xp);
+                    }
+                }
+            }
+        }
+
+        for (int i = theDim[0]-2; i < theDim[0]; i++) {
+            for (int j = 10; j < 15; j++) {
+                for (int k = 30; k < 35; k++) {
                     vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
                     for (int p = 0; p < 10; p++) {
                         double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;

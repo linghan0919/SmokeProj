@@ -38,7 +38,7 @@ void SmokeSim::step()
 	double dt = 0.1;//0.04 or 0.1;
 
     // Step0: Gather user forces
-	if(mTotalFrameNum < 25)
+	if(mTotalFrameNum < 100)
     	mGrid.updateSources();
 
     // Step1: Calculate new velocities
@@ -108,7 +108,7 @@ void SmokeSim::drawAxes()
 
 void SmokeSim::grabScreen()  // Code adapted from asst#1 . USING STB_IMAGE_WRITE INSTEAD OF DEVIL.
 {
-	if (mFrameNum > 500) exit(0);
+	if (mFrameNum > 200) exit(0);
 
 	// Save density field to a .bgeo file
 	std::string densityFile = "../records/DensityFrame" + std::to_string(mFrameNum) + ".bgeo";

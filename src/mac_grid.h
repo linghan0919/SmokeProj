@@ -109,7 +109,7 @@ public:
 	enum BackTraceMode { FORWARDEULER, RK2 };
 	static BackTraceMode theBackTraceMode;
 
-    enum SourceType { INIT, CUBECENTER };
+    enum SourceType { INIT, CUBECENTER, TWOSOURCE };
     static SourceType theSourceType;
 	
 	void saveSmoke(const char* fileName);
