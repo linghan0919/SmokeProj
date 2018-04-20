@@ -19,7 +19,7 @@ MACGrid target;
 // NOTE: x -> cols, z -> rows, y -> stacks
 MACGrid::RenderMode MACGrid::theRenderMode = SHEETS; // { CUBES; SHEETS; }
 MACGrid::BackTraceMode MACGrid::theBackTraceMode = RK2; // { FORWARDEULER, RK2 };
-MACGrid::SourceType MACGrid::theSourceType = CUBECENTER; // { INIT, CUBECENTER, TWOSOURCE };
+MACGrid::SourceType MACGrid::theSourceType = TWOSOURCE; // { INIT, CUBECENTER, TWOSOURCE };
 bool MACGrid::theDisplayVel = false; //true
 
 #define FOR_EACH_CELL \
@@ -91,6 +91,8 @@ void MACGrid::reset()
 
    calculateAMatrix();
    calculatePreconditioner(AMatrix);
+
+//    calculateEigenAMatrix();
 }
 
 void MACGrid::initialize()
@@ -145,16 +147,12 @@ void MACGrid::updateSources()
                         mV(i, j + 1, k) = 5.0;
                         mD(i, j, k) = 1.0;
                         mT(i, j, k) = 1.0;
-
-                        mV(i, j + 2, k) = 5.0;
-                        mD(i, j, k) = 1.0;
-                        mT(i, j, k) = 1.0;
                     }
                 }
             }
 
             // Refresh particles in source.
-            for (int i = 21; i < 20; i++) {
+            for (int i = 12; i < 20; i++) {
                 for (int j = 0; j < 1; j++) {
                     for (int k = 12; k < 20; k++) {
                         vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
@@ -179,10 +177,6 @@ void MACGrid::updateSources()
                         mV(i, j + 1, k) = 5.0;
                         mD(i, j, k) = 1.0;
                         mT(i, j, k) = 1.0;
-
-                        mV(i, j + 2, k) = 5.0;
-                        mD(i, j, k) = 1.0;
-                        mT(i, j, k) = 1.0;
                     }
                 }
             }
@@ -204,112 +198,124 @@ void MACGrid::updateSources()
                 }
             }
         }
+
+        // to test
+        else if(theDim[0] == 3) {
+            // used in [3, 3, 3] grid
+            mV(0, 1, 1) = 1.0;
+            mD(0, 0, 1) = 1.0;
+            mT(0, 0, 1) = 1.0;
+        }
     }
 
     else if(theSourceType == TWOSOURCE) {
-//        // used in [32, 32, 32] grid
-//        for (int i = 0; i < 2; i++) {
-//            for (int j = 15; j < 17; j++) {
-//                for (int k = 15; k < 17; k++) {
-//                    mU(i, j + 1, k) = 5.0;
-//                    mD(i, j, k) = 1.0;
-//                    mT(i, j, k) = 1.0;
-//                }
-//            }
-//        }
-//
-//        for (int i = theDim[0]-2; i < theDim[0]; i++) {
-//            for (int j = 15; j < 17; j++) {
-//                for (int k = 15; k < 17; k++) {
-//                    mU(i, j + 1, k) = -5.0;
-//                    mD(i, j, k) = 1.0;
-//                    mT(i, j, k) = 1.0;
-//                }
-//            }
-//        }
-//
-//        // Refresh particles in source.
-//        for (int i = 0; i < 2; i++) {
-//            for (int j = 15; j < 17; j++) {
-//                for (int k = 15; k < 17; k++) {
-//                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
-//                    for (int p = 0; p < 10; p++) {
-//                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        vec3 shift(a, b, c);
-//                        vec3 xp = cell_center + shift;
-//                        rendering_particles.push_back(xp);
-//                    }
-//                }
-//            }
-//        }
-//
-//        for (int i = theDim[0]-2; i < theDim[0]; i++) {
-//            for (int j = 15; j < 17; j++) {
-//                for (int k = 15; k < 17; k++) {
-//                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
-//                    for (int p = 0; p < 10; p++) {
-//                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-//                        vec3 shift(a, b, c);
-//                        vec3 xp = cell_center + shift;
-//                        rendering_particles.push_back(xp);
-//                    }
-//                }
-//            }
-//        }
-
-        // used in [64, 64, 64] grid
-        for (int i = 0; i < 2; i++) {
-            for (int j = 10; j < 15; j++) {
-                for (int k = 30; k < 35; k++) {
-                    mU(i, j + 1, k) = 5.0;
-                    mD(i, j, k) = 1.0;
-                    mT(i, j, k) = 1.0;
+        if(theDim[0] == 32) {
+            // used in [32, 32, 32] grid
+            for (int i = 0; i < 2; i++) {
+                for (int j = 5; j < 7; j++) {
+                    for (int k = 15; k < 17; k++) {
+                        mU(i, j + 1, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
                 }
             }
-        }
 
-        for (int i = theDim[0]-2; i < theDim[0]; i++) {
-            for (int j = 10; j < 15; j++) {
-                for (int k = 30; k < 35; k++) {
-                    mU(i, j + 1, k) = -5.0;
-                    mD(i, j, k) = 1.0;
-                    mT(i, j, k) = 1.0;
+            for (int i = theDim[0] - 2; i < theDim[0]; i++) {
+                for (int j = 5; j < 7; j++) {
+                    for (int k = 15; k < 17; k++) {
+                        mU(i, j + 1, k) = -5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
                 }
             }
-        }
 
-        // Refresh particles in source.
-        for (int i = 0; i < 2; i++) {
-            for (int j = 10; j < 15; j++) {
-                for (int k = 30; k < 35; k++) {
-                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
-                    for (int p = 0; p < 10; p++) {
-                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        vec3 shift(a, b, c);
-                        vec3 xp = cell_center + shift;
-                        rendering_particles.push_back(xp);
+            // Refresh particles in source.
+            for (int i = 0; i < 2; i++) {
+                for (int j = 5; j < 7; j++) {
+                    for (int k = 15; k < 17; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
+                    }
+                }
+            }
+
+            for (int i = theDim[0] - 2; i < theDim[0]; i++) {
+                for (int j = 5; j < 7; j++) {
+                    for (int k = 15; k < 17; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
                     }
                 }
             }
         }
 
-        for (int i = theDim[0]-2; i < theDim[0]; i++) {
-            for (int j = 10; j < 15; j++) {
-                for (int k = 30; k < 35; k++) {
-                    vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
-                    for (int p = 0; p < 10; p++) {
-                        double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
-                        vec3 shift(a, b, c);
-                        vec3 xp = cell_center + shift;
-                        rendering_particles.push_back(xp);
+        else if(theDim[0] == 64) {
+            // used in [64, 64, 64] grid
+            for (int i = 0; i < 2; i++) {
+                for (int j = 10; j < 15; j++) {
+                    for (int k = 30; k < 35; k++) {
+                        mU(i, j + 1, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
+                }
+            }
+
+            for (int i = theDim[0] - 2; i < theDim[0]; i++) {
+                for (int j = 10; j < 15; j++) {
+                    for (int k = 30; k < 35; k++) {
+                        mU(i, j + 1, k) = -5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
+                }
+            }
+
+            // Refresh particles in source.
+            for (int i = 0; i < 2; i++) {
+                for (int j = 10; j < 15; j++) {
+                    for (int k = 30; k < 35; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
+                    }
+                }
+            }
+
+            for (int i = theDim[0] - 2; i < theDim[0]; i++) {
+                for (int j = 10; j < 15; j++) {
+                    for (int k = 30; k < 35; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
                     }
                 }
             }
@@ -319,7 +325,7 @@ void MACGrid::updateSources()
 }
 
 
-void MACGrid::advectVelocity(double dt)
+void MACGrid::advectVelocity (double dt)
 {
     // TODO: Calculate new velocities and store in target
 
@@ -490,7 +496,10 @@ void MACGrid::advectTemperature(double dt)
 
     // TODO: Your code is here. It builds target.mT for all cells.
     FOR_EACH_CELL {
-        if(isInBox(i, j, k)) continue;
+        if(isInBox(i, j, k)) {
+            target.mT(i, j, k) = 0;
+            continue;
+        }
 
         vec3 curPos = getCenter(i, j, k);
         vec3 curVel = getVelocity(curPos);
@@ -548,7 +557,10 @@ void MACGrid::advectDensity(double dt)
 
     // TODO: Your code is here. It builds target.mD for all cells.
 	FOR_EACH_CELL {
-        if(isInBox(i, j, k)) continue;
+        if(isInBox(i, j, k)) {
+            target.mD(i, j, k) = 0;
+            continue;
+        }
 
 		vec3 curPos = getCenter(i, j, k);
         vec3 curVel = getVelocity(curPos);
@@ -775,16 +787,13 @@ void MACGrid::project(double dt)
     double dt_by_h_rho = 1 / h_rho_by_dt;
 
     FOR_EACH_CELL {
-        if(isInBox(i, j, k)) {
-            d(i, j, k) = 0;
-            continue;
-        }
+        if(isInBox(i, j, k)) continue;
 
         d(i, j, k) = (mU(i, j, k) - mU(i + 1, j, k)
                     + mV(i, j, k) - mV(i, j + 1, k)
                     + mW(i, j, k) - mW(i, j, k + 1)) * h_rho_by_dt;
 
-        /*// Boundary Condition
+        // Boundary Condition
         if(i == 0) {
             d(i, j, k) = d(i, j, k) + mU(i, j, k) * h_rho_by_dt;
         }
@@ -802,21 +811,13 @@ void MACGrid::project(double dt)
         }
         if(k == theDim[MACGrid::Z]) {
             d(i, j, k) = d(i, j, k) + mW(i, j, k + 1) * h_rho_by_dt;
-        }*/
+        }
     }
 
     // Second, construct A, which is already computed using calculateAMatrix() function
     // Third, solve for p using preconditionedConjugateGradient() function
-    preconditionedConjugateGradient(AMatrix, target.mP, d, 100, 0.000001);
-
-    for(int k = boxMin; k <= boxMax; k++) {
-        for(int j = boxMin; j <= boxMax; j++) {
-            for(int i = boxMin; i <= boxMax; i++) {
-                PRINT_LINE(target.mP(i, j, k));
-            }
-        }
-    }
-    PRINT_LINE("--------------------------------------------------------------");
+    preconditionedConjugateGradient(AMatrix, target.mP, d, 500, 0.000001);
+//    useEigenComputeCG(target.mP, d, 100, 0.000001);
 
 
     // Finally, subtract pressure from our velocity
@@ -831,6 +832,8 @@ void MACGrid::project(double dt)
         if(isValidFace(MACGrid::Y, i, j, k)) {
             if(j == 0 || j == theDim[MACGrid::Y] || isBoxBoundaryFace(MACGrid::Y, i, j, k)) target.mV(i, j, k) = 0;
             else target.mV(i, j, k) = mV(i, j, k) - dt_by_h_rho * (target.mP(i, j, k) - target.mP(i, j-1, k));
+
+            //if(target.mV(i, j, k) != 0) PRINT_LINE(target.mV(i, j, k));
         }
 
         if(isValidFace(MACGrid::Z, i, j, k)) {
@@ -901,7 +904,7 @@ void MACGrid::project(double dt)
 
 
    // Then save the result to our object
-   mP = target.mP; 
+   mP = target.mP;
    mU = target.mU;
    mV = target.mV;
    mW = target.mW;
@@ -1147,15 +1150,15 @@ bool MACGrid::isInBox(int i, int j, int k)
 bool MACGrid::isBoxBoundaryFace(int dimension, int i, int j, int k)
 {
     if (dimension == 0) {
-        if (i == boxMin && i == boxMax+1 && j >= boxMin && j <= boxMax && k >= boxMin && k <= boxMax)
+        if ((i == boxMin || i == boxMax+1) && j >= boxMin && j <= boxMax && k >= boxMin && k <= boxMax)
             return true;
 
     } else if (dimension == 1) {
-        if (i >= boxMin && i <= boxMax && j == boxMin && j == boxMax+1 && k >= boxMin && k <= boxMax)
+        if (i >= boxMin && i <= boxMax && (j == boxMin || j == boxMax+1) && k >= boxMin && k <= boxMax)
             return true;
 
     } else if (dimension == 2) {
-        if (i >= boxMin && i <= boxMax && j >= boxMin && j <= boxMax && k == boxMin && k == boxMax+1)
+        if (i >= boxMin && i <= boxMax && j >= boxMin && j <= boxMax && (k == boxMin || k == boxMax+1))
             return true;
     }
 
@@ -1181,7 +1184,6 @@ void MACGrid::calculateAMatrix() {
     // coefficients: self -> number of fluid neighbors;
     //      fluid neighbor -> -1; others -> 0
 	FOR_EACH_CELL {
-
         // Linghan 2018-04-18
         if(isInBox(i, j, k)) {
             AMatrix.diag(i,j,k) = 1;
@@ -1213,9 +1215,11 @@ void MACGrid::calculateAMatrix() {
 			AMatrix.plusK(i,j,k) = -1;
 			numFluidNeighbors++;
 		}
+
 		// Set the diagonal:
 		AMatrix.diag(i,j,k) = numFluidNeighbors;
 	}
+
 }
 
 bool MACGrid::preconditionedConjugateGradient(const GridDataMatrix & A, GridData & p, const GridData & d, int maxIterations, double tolerance) {
@@ -1227,12 +1231,13 @@ bool MACGrid::preconditionedConjugateGradient(const GridDataMatrix & A, GridData
 
 	GridData r = d; // Residual vector.
 
-	/*
+    /*
 	PRINT_LINE("r: ");
 	FOR_EACH_CELL {
 		PRINT_LINE(r(i,j,k));
 	}
-	*/
+    */
+
 	GridData z; z.initialize();
 	applyPreconditioner(r, A, z); // Auxillary vector.
     /*
@@ -1265,7 +1270,7 @@ bool MACGrid::preconditionedConjugateGradient(const GridDataMatrix & A, GridData
 		//r -= alpha * z;
 
 		if (maxMagnitude(r) <= tolerance) {
-			//PRINT_LINE("PCG converged in " << (iteration + 1) << " iterations.");
+			PRINT_LINE("PCG converged in " << (iteration + 1) << " iterations.");
             //PRINT_LINE("r: ");
             //FOR_EACH_CELL {
             //            PRINT_LINE(r(i,j,k)); }
@@ -1301,13 +1306,18 @@ void MACGrid::calculatePreconditioner(const GridDataMatrix & A) {
     // TODO: Build the modified incomplete Cholesky preconditioner following Fig 4.2 on page 36 of Bridson's 2007 SIGGRAPH fluid course notes.
     //       This corresponds to filling in precon(i,j,k) for all cells
     FOR_EACH_CELL {
-        double e = A.diag(i, j, k) - pow((A.plusI(i-1, j, k) * precon(i-1, j, k)), 2)
-                                   - pow((A.plusJ(i, j-1, k) * precon(i, j-1, k)), 2)
-                                   - pow((A.plusK(i, j, k-1) * precon(i, j, k-1)), 2)
-                            - tao * ( A.plusI(i-1, j, k) * (A.plusJ(i-1, j, k) + A.plusK(i-1, j, k)) * pow(precon(i-1, j, k), 2)
-                                  +   A.plusJ(i, j-1, k) * (A.plusI(i, j-1, k) + A.plusK(i, j-1, k)) * pow(precon(i, j-1, k), 2)
-                                  +   A.plusK(i, j, k-1) * (A.plusI(i, j, k-1) + A.plusJ(i, j, k-1)) * pow(precon(i, j, k-1), 2));
-        precon(i, j, k) = 1 / sqrt(e + pow(10, -30));
+        if(!isInBox(i, j, k)) { // Linghan 2018-04-19
+            double e = A.diag(i, j, k) - pow((A.plusI(i - 1, j, k) * precon(i - 1, j, k)), 2)
+                       - pow((A.plusJ(i, j - 1, k) * precon(i, j - 1, k)), 2)
+                       - pow((A.plusK(i, j, k - 1) * precon(i, j, k - 1)), 2)
+                       - tao * (A.plusI(i - 1, j, k) * (A.plusJ(i - 1, j, k) + A.plusK(i - 1, j, k)) *
+                                pow(precon(i - 1, j, k), 2)
+                                + A.plusJ(i, j - 1, k) * (A.plusI(i, j - 1, k) + A.plusK(i, j - 1, k)) *
+                                  pow(precon(i, j - 1, k), 2)
+                                + A.plusK(i, j, k - 1) * (A.plusI(i, j, k - 1) + A.plusJ(i, j, k - 1)) *
+                                  pow(precon(i, j, k - 1), 2));
+            precon(i, j, k) = 1 / sqrt(e + pow(10, -30));
+        }
     }
 
     // Linghan 2018-04-12
@@ -1319,7 +1329,7 @@ void MACGrid::applyPreconditioner(const GridData & r, const GridDataMatrix & A, 
 
     // TODO: change if(0) to if(1) after you implement calculatePreconditoner function.
 
-    if(1) {
+    if(0) {
 
         // APPLY THE PRECONDITIONER:
         // Solve Lq = r for q:
@@ -1327,20 +1337,23 @@ void MACGrid::applyPreconditioner(const GridData & r, const GridDataMatrix & A, 
         q.initialize();
         FOR_EACH_CELL {
                     //if (A.diag(i,j,k) != 0.0) { // If cell is a fluid.
-                    double t = r(i, j, k) - A.plusI(i - 1, j, k) * precon(i - 1, j, k) * q(i - 1, j, k)
-                               - A.plusJ(i, j - 1, k) * precon(i, j - 1, k) * q(i, j - 1, k)
-                               - A.plusK(i, j, k - 1) * precon(i, j, k - 1) * q(i, j, k - 1);
-                    q(i, j, k) = t * precon(i, j, k);
-                    //std::cout << t << " " << r(i, j, k) << " " << q(i, j, k) << std::endl;
-                                //}
+                    if(!isInBox(i, j, k)) { // Linghan 2018-04-19
+                        double t = r(i, j, k) - A.plusI(i - 1, j, k) * precon(i - 1, j, k) * q(i - 1, j, k)
+                                   - A.plusJ(i, j - 1, k) * precon(i, j - 1, k) * q(i, j - 1, k)
+                                   - A.plusK(i, j, k - 1) * precon(i, j, k - 1) * q(i, j, k - 1);
+                        q(i, j, k) = t * precon(i, j, k);
+                    }
+                    //}
                 }
         // Solve L^Tz = q for z:
         FOR_EACH_CELL_REVERSE {
                     //if (A.diag(i,j,k) != 0.0) { // If cell is a fluid.
-                    double t = q(i, j, k) - A.plusI(i, j, k) * precon(i, j, k) * z(i + 1, j, k)
-                               - A.plusJ(i, j, k) * precon(i, j, k) * z(i, j + 1, k)
-                               - A.plusK(i, j, k) * precon(i, j, k) * z(i, j, k + 1);
-                    z(i, j, k) = t * precon(i, j, k);
+                    if(!isInBox(i, j, k)) { // Linghan 2018-04-19
+                        double t = q(i, j, k) - A.plusI(i, j, k) * precon(i, j, k) * z(i + 1, j, k)
+                                   - A.plusJ(i, j, k) * precon(i, j, k) * z(i, j + 1, k)
+                                   - A.plusK(i, j, k) * precon(i, j, k) * z(i, j, k + 1);
+                        z(i, j, k) = t * precon(i, j, k);
+                    }
                     //}
                 }
     }
@@ -1820,4 +1833,88 @@ void MACGrid::drawCube(const MACGrid::Cube& cube)
          glVertex3d(LEN,  LEN, -LEN);
       glEnd();
    glPopMatrix();
+}
+
+// Linghan 2018-04-19
+void MACGrid::calculateEigenAMatrix()
+{
+    int n = theDim[0] * theDim[1] * theDim[2] - pow((boxMax - boxMin + 1), 3);
+    AEigen = Eigen::SparseMatrix<double>(n, n);
+
+    // map (i, j, k) to index
+    int index = 0;
+    FOR_EACH_CELL {
+        if(!isInBox(i, j, k)) {
+            index_map.insert(make_pair(std::vector<int>{i, j, k}, index));
+            index++;
+        }
+    }
+
+    FOR_EACH_CELL {
+        if(!isInBox(i, j, k)) {
+            int selfIdx = index_map.at(std::vector<int>{i, j, k});
+            int numFluidNeighbors = 0;
+            if (i-1 >= 0 && !isInBox(i-1, j, k)) {
+                AEigen.insert(selfIdx, index_map.at(std::vector<int>{i-1, j, k})) = -1;
+                numFluidNeighbors++;
+            }
+            if (i+1 < theDim[MACGrid::X] && !isInBox(i+1, j, k)) {
+                AEigen.insert(selfIdx, index_map.at(std::vector<int>{i+1, j, k})) = -1;
+                numFluidNeighbors++;
+            }
+            if (j-1 >= 0 && !isInBox(i, j-1, k)) {
+                AEigen.insert(selfIdx, index_map.at(std::vector<int>{i, j-1, k})) = -1;
+                numFluidNeighbors++;
+            }
+            if (j+1 < theDim[MACGrid::Y] && !isInBox(i, j+1, k)) {
+                AEigen.insert(selfIdx, index_map.at(std::vector<int>{i, j+1, k})) = -1;
+                numFluidNeighbors++;
+            }
+            if (k-1 >= 0 && !isInBox(i, j, k-1)) {
+                AEigen.insert(selfIdx, index_map.at(std::vector<int>{i, j, k-1})) = -1;
+                numFluidNeighbors++;
+            }
+            if (k+1 < theDim[MACGrid::Z] && !isInBox(i, j, k+1)) {
+                AEigen.insert(selfIdx, index_map.at(std::vector<int>{i, j, k+1})) = -1;
+                numFluidNeighbors++;
+            }
+
+            // Set the diagonal:
+            AEigen.insert(selfIdx, selfIdx) = numFluidNeighbors;
+        }
+    }
+    //std::cout << AEigen << std::endl;
+    std::cout << "finish compute AEigen" << std::endl;
+}
+
+void MACGrid::useEigenComputeCG(GridData & p, const GridData & d, int maxIterations, double tolerance)
+{
+    int n = theDim[0] * theDim[1] * theDim[2] - pow((boxMax - boxMin + 1), 3);
+
+    Eigen::VectorXd vecp(n), vecd(n);
+
+    // fill in d
+    FOR_EACH_CELL {
+        if(!isInBox(i, j, k)) {
+            vecd(index_map.at(std::vector<int>{i, j, k})) = d(i, j, k);
+        }
+    }
+    //std::cout << vecd << std::endl;
+
+    // compute
+    Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double>> pcg;
+
+    pcg.compute(AEigen);
+    vecp = pcg.solve(vecd);
+
+    //std::cout << "#iterations:     " << pcg.iterations() << std::endl;
+    //std::cout << "estimated error: " << pcg.error()      << std::endl;
+
+    // fill in p
+    FOR_EACH_CELL {
+        if(!isInBox(i, j, k)) {
+            p(i, j, k) = vecp(index_map.at(std::vector<int>{i, j, k}));
+        }
+        else p(i, j, k) = 0;
+    }
 }

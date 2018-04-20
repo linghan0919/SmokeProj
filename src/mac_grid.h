@@ -8,6 +8,9 @@
 #include "grid_data.h"
 #include "grid_data_matrix.h" 
 #include <Partio.h>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+
 class Camera;
 
 class MACGrid
@@ -96,12 +99,18 @@ protected:
 	GridData precon;
 
 	// Linghan 2018-04-18
-	int boxMin = 10; int boxMax = 22; // if set boxMin = 100, boxMax = -100, no box
-	//int boxMin = 100, boxMax = -100;
+	int boxMin = 20; int boxMax = 44; // if set boxMin = -1, boxMax = -2, no box
+	//int boxMin = 1, boxMax = 1;
+	//int boxMin = -1, boxMax = -2;
 	double boxMinPos = (boxMin - 1) * theCellSize;
 	double boxMaxPos = boxMax * theCellSize;
 	bool isInBox(int i, int j, int k);
     bool isBoxBoundaryFace(int dimension, int i, int j, int k);
+
+	Eigen::SparseMatrix<double> AEigen;
+	std::map <std::vector<int>, int> index_map;
+	void calculateEigenAMatrix();
+    void useEigenComputeCG(GridData & p, const GridData & d, int maxIterations, double tolerance);
 
 public:
 

@@ -7,7 +7,7 @@
 #include "basic_math.h"
 #include <fstream>
 
-SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(false) // Set true for reocording from begining (Linghan)
+SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(true) // Set true for reocording from begining (Linghan)
 {
    reset();
 }
@@ -43,7 +43,7 @@ void SmokeSim::step()
 
     // Step1: Calculate new velocities
     mGrid.advectVelocity(dt); // get Velocity_hat
-    //mGrid.addExternalForces(dt); // get Velocity_star
+    mGrid.addExternalForces(dt); // get Velocity_star
     mGrid.project(dt); // get Velocity_n+1
 
     // Step2: Calculate new temperature
