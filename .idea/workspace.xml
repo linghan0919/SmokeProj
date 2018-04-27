@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
-      <config projectName="SMOKE" targetName="partio" />
       <config projectName="SMOKE" targetName="SMOKE" />
+      <config projectName="SMOKE" targetName="partio" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -52,8 +52,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
-              <caret line="119" column="1" lean-forward="false" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="1" />
+            <state relative-caret-position="967">
+              <caret line="223" column="36" lean-forward="false" selection-start-line="223" selection-start-column="29" selection-end-line="223" selection-end-column="36" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -65,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/src/constants.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
-              <caret line="9" column="25" lean-forward="false" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
+              <caret line="9" column="33" lean-forward="false" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -74,8 +74,8 @@
       <file leaf-file-name="smoke_sim.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/smoke_sim.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1134">
-              <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+            <state relative-caret-position="-180">
+              <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -84,7 +84,7 @@
       <file leaf-file-name="grid_data.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/grid_data.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-293">
+            <state relative-caret-position="18">
               <caret line="14" column="53" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="53" />
               <folding />
             </state>
@@ -94,18 +94,18 @@
       <file leaf-file-name="grid_data.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/grid_data.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="78">
+            <state relative-caret-position="-144">
               <caret line="49" column="34" lean-forward="false" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mac_grid.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mac_grid.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/mac_grid.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="101" column="36" lean-forward="false" selection-start-line="101" selection-start-column="36" selection-end-line="101" selection-end-column="36" />
+            <state relative-caret-position="229">
+              <caret line="128" column="10" lean-forward="false" selection-start-line="128" selection-start-column="9" selection-end-line="128" selection-end-column="10" />
               <folding>
                 <element signature="e#81#110#0" expanded="true" />
               </folding>
@@ -113,17 +113,18 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mac_grid.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mac_grid.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/mac_grid.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="1272" column="12" lean-forward="false" selection-start-line="1272" selection-start-column="12" selection-end-line="1272" selection-end-column="12" />
+            <state relative-caret-position="-758">
+              <caret line="634" column="37" lean-forward="false" selection-start-line="634" selection-start-column="30" selection-end-line="634" selection-end-column="37" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
-                <element signature="e#12291#13236#0" expanded="false" />
-                <element signature="e#14381#15326#0" expanded="false" />
-                <element signature="e#16471#17399#0" expanded="false" />
-                <element signature="e#22096#22699#0" expanded="false" />
+                <element signature="e#12292#13237#0" expanded="false" />
+                <element signature="e#14382#15327#0" expanded="false" />
+                <element signature="e#16472#17400#0" expanded="false" />
+                <element signature="e#22098#22701#0" expanded="false" />
+                <element signature="e#32175#32849#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -133,19 +134,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pro</find>
-      <find>isValid</find>
-      <find>isInbox</find>
-      <find>PROJE</find>
-      <find>pre</find>
-      <find>proj</find>
-      <find>isvalidcell</find>
-      <find>apply</find>
-      <find>advectv</find>
-      <find>clipTo</find>
-      <find>projec</find>
-      <find>mD</find>
-      <find>calc</find>
       <find>isinbox</find>
       <find>init</find>
       <find>EVERYW</find>
@@ -154,15 +142,28 @@
       <find>upda</find>
       <find>calculateA</find>
       <find>cac</find>
-      <find>calcu</find>
       <find>proje</find>
       <find>EIGENA</find>
-      <find>project</find>
       <find>useEigen</find>
-      <find>mTot</find>
       <find>prec</find>
-      <find>dim</find>
       <find>pr</find>
+      <find>advectv</find>
+      <find>advecttem</find>
+      <find>calcu</find>
+      <find>mTot</find>
+      <find>dim</find>
+      <find>calculatea</find>
+      <find>velocit</find>
+      <find>project</find>
+      <find>render</find>
+      <find>addre</find>
+      <find>advectre</find>
+      <find>advectdensity</find>
+      <find>advectden</find>
+      <find>clipto</find>
+      <find>boxMinPos</find>
+      <find>source</find>
+      <find>exter</find>
     </findStrings>
     <replaceStrings>
       <replace>curPosXface</replace>
@@ -178,8 +179,8 @@
         <option value="$PROJECT_DIR$/src/grid_data.h" />
         <option value="$PROJECT_DIR$/src/grid_data.cpp" />
         <option value="$PROJECT_DIR$/src/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/src/smoke_sim.cpp" />
         <option value="$PROJECT_DIR$/src/mac_grid.cpp" />
+        <option value="$PROJECT_DIR$/src/smoke_sim.cpp" />
         <option value="$PROJECT_DIR$/src/constants.cpp" />
         <option value="$PROJECT_DIR$/src/mac_grid.h" />
       </list>
@@ -280,12 +281,13 @@
       <workItem from="1523541661233" duration="45536000" />
       <workItem from="1523660633679" duration="870000" />
       <workItem from="1523901774558" duration="21348000" />
-      <workItem from="1524067481384" duration="44949000" />
+      <workItem from="1524067481384" duration="54069000" />
+      <workItem from="1524790464016" duration="6552000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="127575000" />
+    <option name="totallyTimeSpent" value="143247000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="419" y="45" width="1853" height="901" extended-state="6" />
@@ -296,9 +298,8 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39517152" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3303685" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4040661" sideWeight="0.5018909" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29479036" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31385008" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -308,6 +309,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -342,36 +344,16 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/mac_grid.cpp</url>
-          <line>1493</line>
+          <line>1494</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/mac_grid.cpp</url>
-          <line>818</line>
-          <option name="timeStamp" value="106" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/mac_grid.cpp</url>
-          <line>1249</line>
-          <option name="timeStamp" value="107" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/mac_grid.cpp</url>
-          <line>1241</line>
-          <option name="timeStamp" value="112" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/mac_grid.cpp</url>
-          <line>1919</line>
-          <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/mac_grid.cpp</url>
-          <line>1887</line>
+          <line>1888</line>
           <option name="timeStamp" value="120" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="121" />
+      <option name="time" value="123" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
@@ -401,6 +383,39 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/mac_grid.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1710">
+          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding>
+            <element signature="e#81#110#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mac_grid.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3024">
+          <caret line="168" column="13" lean-forward="false" selection-start-line="168" selection-start-column="13" selection-end-line="168" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#12292#13237#0" expanded="false" />
+            <element signature="e#14382#15327#0" expanded="false" />
+            <element signature="e#16472#17400#0" expanded="false" />
+            <element signature="e#22098#22701#0" expanded="false" />
+            <element signature="e#32175#32849#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/smoke_sim.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1980">
+          <caret line="110" column="21" lean-forward="false" selection-start-line="110" selection-start-column="21" selection-end-line="110" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2142">
@@ -459,10 +474,11 @@
           <caret line="598" column="3" lean-forward="true" selection-start-line="598" selection-start-column="3" selection-end-line="598" selection-end-column="3" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#12291#13236#0" expanded="false" />
-            <element signature="e#14381#15326#0" expanded="false" />
-            <element signature="e#16471#17399#0" expanded="false" />
-            <element signature="e#22096#22699#0" expanded="false" />
+            <element signature="e#12292#13237#0" expanded="false" />
+            <element signature="e#14382#15327#0" expanded="false" />
+            <element signature="e#16472#17400#0" expanded="false" />
+            <element signature="e#22098#22701#0" expanded="false" />
+            <element signature="e#32175#32849#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -489,7 +505,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -525,10 +540,11 @@
           <caret line="1223" column="37" lean-forward="false" selection-start-line="1223" selection-start-column="37" selection-end-line="1223" selection-end-column="37" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#12291#13236#0" expanded="false" />
-            <element signature="e#14381#15326#0" expanded="false" />
-            <element signature="e#16471#17399#0" expanded="false" />
-            <element signature="e#22096#22699#0" expanded="false" />
+            <element signature="e#12292#13237#0" expanded="false" />
+            <element signature="e#14382#15327#0" expanded="false" />
+            <element signature="e#16472#17400#0" expanded="false" />
+            <element signature="e#22098#22701#0" expanded="false" />
+            <element signature="e#32175#32849#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -571,7 +587,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -607,10 +622,11 @@
           <caret line="1204" column="0" lean-forward="false" selection-start-line="1204" selection-start-column="0" selection-end-line="1204" selection-end-column="0" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#12291#13236#0" expanded="false" />
-            <element signature="e#14381#15326#0" expanded="false" />
-            <element signature="e#16471#17399#0" expanded="false" />
-            <element signature="e#22096#22699#0" expanded="false" />
+            <element signature="e#12292#13237#0" expanded="false" />
+            <element signature="e#14382#15327#0" expanded="false" />
+            <element signature="e#16472#17400#0" expanded="false" />
+            <element signature="e#22098#22701#0" expanded="false" />
+            <element signature="e#32175#32849#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -665,10 +681,11 @@
           <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#12291#13236#0" expanded="false" />
-            <element signature="e#14381#15326#0" expanded="false" />
-            <element signature="e#16471#17399#0" expanded="false" />
-            <element signature="e#22096#22699#0" expanded="false" />
+            <element signature="e#12292#13237#0" expanded="false" />
+            <element signature="e#14382#15327#0" expanded="false" />
+            <element signature="e#16472#17400#0" expanded="false" />
+            <element signature="e#22098#22701#0" expanded="false" />
+            <element signature="e#32175#32849#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -688,21 +705,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="119" column="1" lean-forward="false" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/grid_data_matrix.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-162">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -710,7 +716,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -718,23 +723,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-162">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/eigen_compute.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/eigen_compute.h" />
     <entry file="file://$PROJECT_DIR$/src/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="12" column="14" lean-forward="true" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -750,7 +746,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -758,7 +753,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
           <caret line="150" column="0" lean-forward="false" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -766,7 +760,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
           <caret line="386" column="19" lean-forward="false" selection-start-line="386" selection-start-column="19" selection-end-line="386" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -774,43 +767,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="143">
           <caret line="412" column="0" lean-forward="false" selection-start-line="412" selection-start-column="0" selection-end-line="412" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/smoke_sim.cpp">
+    <entry file="file://$PROJECT_DIR$/src/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1134">
-          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="967">
+          <caret line="223" column="36" lean-forward="false" selection-start-line="223" selection-start-column="29" selection-end-line="223" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/constants.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
-          <caret line="9" column="25" lean-forward="false" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
+          <caret line="9" column="33" lean-forward="false" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mac_grid.cpp">
+    <entry file="file://$PROJECT_DIR$/src/smoke_sim.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="1272" column="12" lean-forward="false" selection-start-line="1272" selection-start-column="12" selection-end-line="1272" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#12291#13236#0" expanded="false" />
-            <element signature="e#14381#15326#0" expanded="false" />
-            <element signature="e#16471#17399#0" expanded="false" />
-            <element signature="e#22096#22699#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="-180">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/grid_data.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-293">
+        <state relative-caret-position="18">
           <caret line="14" column="53" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="53" />
           <folding />
         </state>
@@ -818,7 +806,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/grid_data.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
+        <state relative-caret-position="-144">
           <caret line="49" column="34" lean-forward="false" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="34" />
           <folding />
         </state>
@@ -826,10 +814,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/mac_grid.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="101" column="36" lean-forward="false" selection-start-line="101" selection-start-column="36" selection-end-line="101" selection-end-column="36" />
+        <state relative-caret-position="229">
+          <caret line="128" column="10" lean-forward="false" selection-start-line="128" selection-start-column="9" selection-end-line="128" selection-end-column="10" />
           <folding>
             <element signature="e#81#110#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mac_grid.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-758">
+          <caret line="634" column="37" lean-forward="false" selection-start-line="634" selection-start-column="30" selection-end-line="634" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#12292#13237#0" expanded="false" />
+            <element signature="e#14382#15327#0" expanded="false" />
+            <element signature="e#16472#17400#0" expanded="false" />
+            <element signature="e#22098#22701#0" expanded="false" />
+            <element signature="e#32175#32849#0" expanded="true" />
           </folding>
         </state>
       </provider>

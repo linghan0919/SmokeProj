@@ -19,7 +19,7 @@ MACGrid target;
 // NOTE: x -> cols, z -> rows, y -> stacks
 MACGrid::RenderMode MACGrid::theRenderMode = SHEETS; // { CUBES; SHEETS; }
 MACGrid::BackTraceMode MACGrid::theBackTraceMode = RK2; // { FORWARDEULER, RK2 };
-MACGrid::SourceType MACGrid::theSourceType = TWOSOURCE; // { INIT, CUBECENTER, TWOSOURCE };
+MACGrid::SourceType MACGrid::theSourceType = CUBECENTER; // { INIT, CUBECENTER, TWOSOURCE };
 bool MACGrid::theDisplayVel = false; //true
 
 #define FOR_EACH_CELL \
@@ -173,7 +173,7 @@ void MACGrid::updateSources()
             // used in [64, 64, 64] grid
             for (int i = 20; i < 42; i++) {
                 for (int j = 0; j < 2; j++) {
-                    for (int k = 20; k < 42; k++) {
+                    for (int k = 26; k < 38; k++) {
                         mV(i, j + 1, k) = 5.0;
                         mD(i, j, k) = 1.0;
                         mT(i, j, k) = 1.0;
@@ -184,7 +184,7 @@ void MACGrid::updateSources()
             // Refresh particles in source.
             for (int i = 20; i < 42; i++) {
                 for (int j = 0; j < 2; j++) {
-                    for (int k = 20; k < 42; k++) {
+                    for (int k = 26; k < 38; k++) {
                         vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
                         for (int p = 0; p < 10; p++) {
                             double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
@@ -589,6 +589,7 @@ void MACGrid::advectDensity(double dt)
 
     // Then save the result to our object
     mD = target.mD;
+
 }
 
 void MACGrid::computeBuoyancy(double dt)
@@ -1003,7 +1004,7 @@ vec3 MACGrid::getRewoundPosition(const vec3 & currentPosition, const double dt) 
 }
 
 
-vec3 MACGrid::clipToGrid(const vec3& outsidePoint, const vec3& insidePoint) {
+vec3 MACGrid:: clipToGrid(const vec3& outsidePoint, const vec3& insidePoint) {
 	/*
 	// OLD:
 	vec3 rewindPosition = outsidePoint;

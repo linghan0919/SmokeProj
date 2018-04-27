@@ -99,11 +99,11 @@ protected:
 	GridData precon;
 
 	// Linghan 2018-04-18
-	int boxMin = 20; int boxMax = 44; // if set boxMin = -1, boxMax = -2, no box
-	//int boxMin = 1, boxMax = 1;
+	int boxMin = 16; int boxMax = 48; // if set boxMin = -1, boxMax = -2, no box
+	//int boxMin = 10, boxMax = 22;
 	//int boxMin = -1, boxMax = -2;
-	double boxMinPos = (boxMin - 1) * theCellSize;
-	double boxMaxPos = boxMax * theCellSize;
+	double boxMinPos = boxMin * theCellSize;
+	double boxMaxPos = (boxMax + 1) * theCellSize;
 	bool isInBox(int i, int j, int k);
     bool isBoxBoundaryFace(int dimension, int i, int j, int k);
 
