@@ -99,11 +99,16 @@ protected:
 	GridData precon;
 
 	// Linghan 2018-04-18
+    bool useEigen = false;
+
 	int boxMin = 16; int boxMax = 48; // if set boxMin = -1, boxMax = -2, no box
 	//int boxMin = 10, boxMax = 22;
+    //int boxMin = 6, boxMax = 12;
 	//int boxMin = -1, boxMax = -2;
 	double boxMinPos = boxMin * theCellSize;
 	double boxMaxPos = (boxMax + 1) * theCellSize;
+    bool boxUp = true;
+
 	bool isInBox(int i, int j, int k);
     bool isBoxBoundaryFace(int dimension, int i, int j, int k);
 
@@ -132,6 +137,8 @@ public:
 	void saveSmoke(const char* fileName);
 	void saveParticle(std::string filename);
 	void saveDensity(std::string filename);
+
+    void updateBox();
 };
 
 #endif

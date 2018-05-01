@@ -7,7 +7,7 @@
 #include "basic_math.h"
 #include <fstream>
 
-SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(true) // Set true for reocording from begining (Linghan)
+SmokeSim::SmokeSim() : mFrameNum(0), mTotalFrameNum(0), mRecordEnabled(false) // Set true for reocording from begining (Linghan)
 {
    reset();
 }
@@ -35,7 +35,9 @@ void SmokeSim::setGridDimensions(int x, int y, int z)
 
 void SmokeSim::step()
 {
-	double dt = 0.04;//0.04 or 0.1;
+	double dt = 0.1;//0.04 or 0.1;
+
+    //mGrid.updateBox();
 
     // Step0: Gather user forces
 	if(mTotalFrameNum < 100)
@@ -108,7 +110,7 @@ void SmokeSim::drawAxes()
 
 void SmokeSim::grabScreen()  // Code adapted from asst#1 . USING STB_IMAGE_WRITE INSTEAD OF DEVIL.
 {
-	if (mFrameNum > 500) exit(0);
+	if (mFrameNum > 300) exit(0);
 
 	// Save density field to a .bgeo file
 	std::string densityFile = "../records/DensityFrame" + std::to_string(mFrameNum) + ".bgeo";

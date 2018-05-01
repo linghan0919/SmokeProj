@@ -89,10 +89,13 @@ void MACGrid::reset()
    mD.initialize();
    mT.initialize(0.0);
 
-   calculateAMatrix();
-   calculatePreconditioner(AMatrix);
+    if(useEigen)
+        calculateEigenAMatrix();
+    else {
+        calculateAMatrix();
+        calculatePreconditioner(AMatrix);
+    }
 
-//    calculateEigenAMatrix();
 }
 
 void MACGrid::initialize()
@@ -205,6 +208,36 @@ void MACGrid::updateSources()
             mV(0, 1, 1) = 1.0;
             mD(0, 0, 1) = 1.0;
             mT(0, 0, 1) = 1.0;
+        }
+
+        else if(theDim[0] == 16) {
+            // used in [16, 16, 16] grid
+            for (int i = 5; i < 13; i++) {
+                for (int j = 0; j < 2; j++) {
+                    for (int k = 5; k < 13; k++) {
+                        mV(i, j + 1, k) = 5.0;
+                        mD(i, j, k) = 1.0;
+                        mT(i, j, k) = 1.0;
+                    }
+                }
+            }
+
+            // Refresh particles in source.
+            for (int i = 5; i < 13; i++) {
+                for (int j = 0; j < 2; j++) {
+                    for (int k = 5; k < 13; k++) {
+                        vec3 cell_center(theCellSize * (i + 0.5), theCellSize * (j + 0.5), theCellSize * (k + 0.5));
+                        for (int p = 0; p < 10; p++) {
+                            double a = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double b = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            double c = ((float) rand() / RAND_MAX - 0.5) * theCellSize;
+                            vec3 shift(a, b, c);
+                            vec3 xp = cell_center + shift;
+                            rendering_particles.push_back(xp);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -817,9 +850,10 @@ void MACGrid::project(double dt)
 
     // Second, construct A, which is already computed using calculateAMatrix() function
     // Third, solve for p using preconditionedConjugateGradient() function
-    preconditionedConjugateGradient(AMatrix, target.mP, d, 500, 0.000001);
-//    useEigenComputeCG(target.mP, d, 100, 0.000001);
-
+    if(useEigen)
+        useEigenComputeCG(target.mP, d, 100, 0.000001);
+    else
+        preconditionedConjugateGradient(AMatrix, target.mP, d, 500, 0.000001);
 
     // Finally, subtract pressure from our velocity
     // u^(n+1)_i,j,k = u^_i,j,k - dt/(airDensity*h) * (P_i,j,k - P_i-1,j,k)
@@ -1839,6 +1873,7 @@ void MACGrid::drawCube(const MACGrid::Cube& cube)
 // Linghan 2018-04-19
 void MACGrid::calculateEigenAMatrix()
 {
+    index_map.clear();
     int n = theDim[0] * theDim[1] * theDim[2] - pow((boxMax - boxMin + 1), 3);
     AEigen = Eigen::SparseMatrix<double>(n, n);
 
@@ -1917,5 +1952,34 @@ void MACGrid::useEigenComputeCG(GridData & p, const GridData & d, int maxIterati
             p(i, j, k) = vecp(index_map.at(std::vector<int>{i, j, k}));
         }
         else p(i, j, k) = 0;
+    }
+}
+
+void MACGrid::updateBox()
+{
+    if(boxUp) {
+        if(boxMax < theDim[0] - 1) {
+            boxMin += 1;
+            boxMax += 1;
+        }
+        else boxUp = false;
+    }
+
+    else {
+        if(boxMin > 0) {
+            boxMin -= 1;
+            boxMax -= 1;
+        }
+        else boxUp = true;
+    }
+
+    boxMinPos = boxMin * theCellSize;
+    boxMaxPos = (boxMax + 1) * theCellSize;
+
+    if(useEigen)
+        calculateEigenAMatrix();
+    else {
+        calculateAMatrix();
+        calculatePreconditioner(AMatrix);
     }
 }
